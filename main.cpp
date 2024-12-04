@@ -6,19 +6,11 @@
 #include <cctype>
 #include <conio.h>
 #include "lib/menu.h"
-char s[256];
-char *t;
-void citire()
-{
-  std::cin.getline(s, 255);
-  t = s;
-}
-
+char t[100];
 int main()
 {
   initwindow(1280, 720, "Calculator grafic functie");
-  init();
-  citire();
+  init(t);
   menu(t);
   getch();
   closegraph();

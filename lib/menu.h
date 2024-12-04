@@ -2,12 +2,37 @@
 #include <graphics.h>
 #include <winbgim.h>
 #define font 8
-void init()
+
+void clearBuffer(char *buffer)
+{
+  for (int i = 0; i < 100; i++)
+    buffer[i] = '\0';
+}
+void init(char *buffer)
 {
   setcolor(WHITE);
-  char *text = "Introduceti o functie in consola pentru a incepe";
+  char *text = "Introduceti o functie pentru a incepe";
   settextstyle(font, HORIZ_DIR, 4);
   outtextxy(getmaxx() / 2 - textwidth(text) / 2, 50, text);
+  while (1)
+  {
+    delay(10);
+    if (kbhit())
+    {
+      char c = getch();
+      if (c == 13)
+        break;
+      else if (c == 8)
+      {
+        buffer[strlen(buffer) - 1] = '\0';
+      }
+      else
+        buffer[strlen(buffer)] = c, buffer[strlen(buffer)] = '\0';
+      cleardevice();
+      outtextxy(getmaxx() / 2 - textwidth(text) / 2, 50, text);
+      outtextxy(getmaxx() / 2 - textwidth(buffer) / 2, 80, buffer);
+    }
+  }
 }
 
 void introduInfSup(float &inf, float &sup, char *t)
@@ -20,10 +45,67 @@ void introduInfSup(float &inf, float &sup, char *t)
   outtextxy(midx - textwidth(t) / 2, 60, t);
 
   outtextxy(midx - textwidth("Introduceti limitele intervalului") / 2, 100, "Introduceti limitele intervalului");
-  std::cin >> inf >> sup;
+  outtextxy(midx - textwidth("Limita inferioara:") / 2, 150, "Limita inferioara:");
+
   char buffer[100];
-  sprintf(buffer, "[%f,%f]", inf, sup);
-  outtextxy(midx - textwidth(buffer) / 2, 160, buffer);
+  clearBuffer(buffer);
+
+  while (1)
+  {
+    delay(10);
+    if (kbhit())
+    {
+      char c = getch();
+      if (c == 13)
+        break;
+      else if (c == 8)
+      {
+        buffer[strlen(buffer) - 1] = '\0';
+      }
+      else
+        buffer[strlen(buffer)] = c, buffer[strlen(buffer)] = '\0';
+      cleardevice();
+
+      outtextxy(midx - textwidth("Functia introdusa:") / 2, 20, "Functia introdusa:");
+      outtextxy(midx - textwidth(t) / 2, 60, t);
+      outtextxy(midx - textwidth("Introduceti limitele intervalului") / 2, 100, "Introduceti limitele intervalului");
+      outtextxy(midx - textwidth("Limita inferioara:") / 2, 150, "Limita inferioara:");
+      outtextxy(midx + textwidth("Limita inferioara:") / 2 + 10, 150, buffer);
+    }
+  }
+  inf = atof(buffer);
+  char inferior[100];
+  strcpy(inferior, buffer);
+  clearBuffer(buffer);
+  outtextxy(midx - textwidth("Limita superioara:") / 2, 180, "Limita superioara:");
+
+  while (1)
+  {
+    delay(10);
+    if (kbhit())
+    {
+      char c = getch();
+      if (c == 13)
+        break;
+      else if (c == 8)
+      {
+        buffer[strlen(buffer) - 1] = '\0';
+      }
+      else
+        buffer[strlen(buffer)] = c, buffer[strlen(buffer)] = '\0';
+      cleardevice();
+
+      outtextxy(midx - textwidth("Functia introdusa:") / 2, 20, "Functia introdusa:");
+      outtextxy(midx - textwidth(t) / 2, 60, t);
+      outtextxy(midx - textwidth("Introduceti limitele intervalului") / 2, 100, "Introduceti limitele intervalului");
+      outtextxy(midx - textwidth("Limita inferioara:") / 2, 150, "Limita inferioara:");
+      outtextxy(midx + textwidth("Limita inferioara:") / 2 + 10, 150, inferior);
+      outtextxy(midx - textwidth("Limita superioara:") / 2, 180, "Limita superioara:");
+      outtextxy(midx + textwidth("Limita superioara:") / 2 + 10, 180, buffer);
+    }
+  }
+  sup = atof(buffer);
+  std::cout << inf << " " << sup;
 }
 
 void menu(char *t)
