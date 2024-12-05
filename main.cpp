@@ -15,11 +15,8 @@ int main()
   menu(t);
   transformare_functie(t);
   transformare_din_infix_in_postfix();
-  while (!esteVidaS(postfixata))
-  {
-    cout << postfixata->inf << " ";
-    pop(postfixata);
-  }
+  afisarePostfixata();
+
   getch();
   closegraph();
   return 0;

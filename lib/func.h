@@ -238,3 +238,11 @@ void transformare_din_infix_in_postfix()
     pop(S);
   }
 }
+void afisarePostfixata()
+{
+  while (!esteVidaS(postfixata))
+  {
+    cout << postfixata->inf << " ";
+    pop(postfixata);
+  }
+}
