@@ -201,8 +201,6 @@ void settingsMenu()
   short midx = getmaxx() / 2, midy = getmaxy() / 2;
   cleardevice();
   restore();
-  std::cout << "lang:" << opt.lang << "  ";
-  std::cout << "color:" << opt.color << "\n";
   readimagefile("img/ro.jpg", 40, 50, 104, 86);
   readimagefile("img/en.jpg", 40, 100, 104, 136);
   short left, top;
