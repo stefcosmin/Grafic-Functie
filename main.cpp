@@ -7,10 +7,12 @@
 #include <conio.h>
 #include "lib/menu.h"
 #include "lib/func.h"
+#include "lib/settings.h"
 char t[100];
 int main()
 {
   initwindow(1280, 720, "Calculator grafic functie");
+  start();
   init(t);
   menu(t);
   transformare_functie(t);
