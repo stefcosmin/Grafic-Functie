@@ -1,8 +1,6 @@
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
-#include <graphics.h>
-#include <winbgim.h>
 #include <string.h>
 #include <math.h>
 using namespace std;
@@ -238,6 +236,7 @@ void transformare_din_infix_in_postfix()
     pop(S);
   }
 }
+
 void afisarePostfixata()
 {
   while (!esteVidaS(postfixata))
