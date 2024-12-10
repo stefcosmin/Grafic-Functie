@@ -10,6 +10,7 @@ void clearBuffer(char *buffer)
 }
 void init(char *buffer)
 {
+  cleardevice();
   setcolor(WHITE);
   char *text = "Introduceti o functie pentru a incepe";
   settextstyle(font, HORIZ_DIR, 4);

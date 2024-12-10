@@ -8,14 +8,14 @@
 #include "lib/menu.h"
 #include "lib/func.h"
 #include "lib/settings.h"
-char t[100];
+char func[100];
 int main()
 {
   initwindow(1280, 720, "Calculator grafic functie");
   start();
-  init(t);
-  menu(t);
-  transformare_functie(t);
+  init(func);
+  menu(func);
+  transformare_functie(func);
   transformare_din_infix_in_postfix();
   afisarePostfixata();
 
