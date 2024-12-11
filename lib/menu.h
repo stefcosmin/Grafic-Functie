@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <graphics.h>
 #include <winbgim.h>
@@ -140,11 +141,8 @@ void menu(char *t)
     float inf, sup;
 
     introduInfSup(inf, sup, t);
-
-    // deseneaza cu limite
   }
   else if (x > (midx + 15) && x < (midx + textwidth("NU") + 25) && y > (midy - 60 - textheight("NU")) && y < (midy - 50))
   {
-    // deseneaza
   }
 }

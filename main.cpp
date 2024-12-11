@@ -8,6 +8,7 @@
 #include "lib/menu.h"
 #include "lib/func.h"
 #include "lib/settings.h"
+#include "lib/drawgraph.h"
 char func[100];
 int main()
 {

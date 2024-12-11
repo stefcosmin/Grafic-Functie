@@ -1,3 +1,4 @@
+#pragma once
 #include <cmath>
 #include <cstdio>
 #include <cstring>
@@ -26,14 +27,14 @@ void select(short colorLeft, short colorTop);
 
 void save()
 {
-  fout.open("data/settings.sci", fstream::binary);
+  fout.open("data/settings.dat", fstream::binary);
   fout.write((char *)&opt, sizeof(settings));
   fout.close();
 }
 
 void restore()
 {
-  fin.open("data/settings.sci", fstream::binary);
+  fin.open("data/settings.dat", fstream::binary);
   fin.read((char *)&opt, sizeof(settings));
   fin.close();
 }
@@ -239,6 +240,7 @@ void settingsMenu()
 void start()
 {
   cleardevice();
+  clearmouseclick(WM_LBUTTONDOWN);
   settextstyle(font, HORIZ_DIR, 2);
   short midx = getmaxx() / 2, midy = getmaxy() / 2;
   drawSettings();
@@ -258,7 +260,6 @@ void start()
     settingsMenu();
   else if (x > (midx - 100) && x < (midx - 30) && y > (midy - 35) && y < (midy + 35)) // start
     return;                                                                           // meniu introducere functie
-  getch();
 }
 
 void select(short colorLeft, short colorTop)
@@ -282,23 +283,21 @@ void select(short colorLeft, short colorTop)
     getmouseclick(WM_LBUTTONDOWN, x, y);
   }
   if (x > 40 && x < 192 && y > 40 && y < 86)
-    opt.lang = 0;
+    opt.lang = 0, save(), settingsMenu();
   else if (x > 40 && x < 204 && y > 100 && y < 136)
-    opt.lang = 1;
+    opt.lang = 1, save(), settingsMenu();
   else if (x > colorLeft && x < colorLeft + 160 && y > colorTop && y < colorTop + 100)
-    opt.color = 0;
+    opt.color = 0, save(), settingsMenu();
   else if (x > colorLeft + 180 && x < colorLeft + 340 && y > colorTop && y < colorTop + 100)
-    opt.color = 1;
+    opt.color = 1, save(), settingsMenu();
   else if (x > colorLeft + 360 && x < colorLeft + 520 && y > colorTop && y < colorTop + 100)
-    opt.color = 2;
+    opt.color = 2, save(), settingsMenu();
   else if (x > colorLeft && x < colorLeft + 160 && y > colorTop + 120 && y < colorTop + 220)
-    opt.color = 4;
+    opt.color = 4, save(), settingsMenu();
   else if (x > colorLeft + 180 && x < colorLeft + 340 && y > colorTop + 120 && y < colorTop + 220)
-    opt.color = 5;
+    opt.color = 5, save(), settingsMenu();
   else if (x > colorLeft + 360 && x < colorLeft + 520 && y > colorTop + 120 && y < colorTop + 220)
-    opt.color = 14;
+    opt.color = 14, save(), settingsMenu();
   else if (x > (midx - textwidth("Inapoi la meniu") / 2) && x < (midx + textwidth("Inapoi la meniu") / 2) && y > (460 - textheight("Inapoi la meniu") / 2) && y < (460 + textheight("Inapoi la meniu") / 2))
     start();
-  save();
-  settingsMenu();
 }
