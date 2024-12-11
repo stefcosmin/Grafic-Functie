@@ -27,14 +27,14 @@ void select(short colorLeft, short colorTop);
 
 void save()
 {
-  fout.open("data/settings.dat", fstream::binary);
+  fout.open("data/settings.dat", std::fstream::binary);
   fout.write((char *)&opt, sizeof(settings));
   fout.close();
 }
 
 void restore()
 {
-  fin.open("data/settings.dat", fstream::binary);
+  fin.open("data/settings.dat", std::fstream::binary);
   fin.read((char *)&opt, sizeof(settings));
   fin.close();
 }

@@ -15,11 +15,7 @@ char fun[256];
 char vect[256];
 int v[50];
 double MINI, MAXI, minim, maxim;
-int STG = 0, DRP = 0, SUS = 0, JOS = 0;
-void graphBorder()
-{
-  DRP = getmaxx() - getmaxx() / 4, JOS = getmaxy();
-}
+int STG = 250, DRP = 1100, SUS = 100, JOS = 600;
 struct nod
 {
   char inf;
@@ -287,7 +283,6 @@ void transformare_din_infix_in_postfix()
     pop(S);
   }
 }
-
 double calculare_val_fct_din_postf(double x)
 {
   double val;
@@ -340,9 +335,8 @@ double v_functie(double x)
 {
   transformare_functie();
   transformare_din_infix_in_postfix();
-  return -1 * calculare_val_fct_din_postf(x);
+  return calculare_val_fct_din_postf(x);
 }
-
 int discontinuitate(double x)
 {
   double ep = 1e-6;
@@ -405,7 +399,7 @@ void desenare_grafic_functie(double A, double B, int culoaregrafic, int culoarec
     if (discontinuitate(x))
     {
       setcolor(COLOR(18, 18, 18));
-      // line(xe, SUS + 2, xe, JOS - 2);
+      line(xe, SUS + 2, xe, JOS - 2);
       if (culoarechenar == 1)
         setcolor(RED);
       else if (culoarechenar == 2)
@@ -428,14 +422,20 @@ void desenare_grafic_functie(double A, double B, int culoaregrafic, int culoarec
     }
     else
     {
-      setcolor(culoaregrafic);
+      if (culoaregrafic == 1)
+        setcolor(RED);
+      else if (culoaregrafic == 2)
+        setcolor(GREEN);
+      else if (culoaregrafic == 3)
+        setcolor(BLUE);
+      else if (culoaregrafic == 4)
+        setcolor(MAGENTA);
       line(xe, ye, xpct, ypct);
     }
     xe = xpct;
     ye = ypct;
   }
 }
-
 void desenare_axe(double A, double B)
 {
   double dim, unitate, i;
@@ -465,7 +465,16 @@ void desenare_axe(double A, double B)
   }
 }
 
-void copieFun(char *t)
+int main()
 {
-  strcpy(fun, t);
+  cin.getline(fun, 256);
+  double minim, maxim;
+  minim_si_maxim(0, 2 * pi);
+  minim_si_maxim_normalizate(0, 2 * pi, minim, maxim);
+  cout << "MINIM: " << MINI << " " << minim << '\n';
+  cout << "MAXIM: " << MAXI << " " << maxim;
+  desenare_grafic_functie(0, 2 * pi, 2, 4);
+  getch();
+  closegraph();
+  return 0;
 }
