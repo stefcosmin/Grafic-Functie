@@ -16,6 +16,7 @@ int main()
   start();
   init(func);
   menu(func);
+  drawPZ();
   transformare_functie(func);
   transformare_din_infix_in_postfix();
   afisarePostfixata();

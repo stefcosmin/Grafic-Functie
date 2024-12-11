@@ -139,7 +139,6 @@ void menu(char *t)
   if (x > (midx - textwidth("DA") - 25) && x < (midx - 15) && y > (midy - 60 - textheight("DA")) && y < (midy - 50))
   {
     float inf, sup;
-
     introduInfSup(inf, sup, t);
   }
   else if (x > (midx + 15) && x < (midx + textwidth("NU") + 25) && y > (midy - 60 - textheight("NU")) && y < (midy - 50))
