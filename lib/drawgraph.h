@@ -4,6 +4,10 @@
 #include <winbgim.h>
 #include <cmath>
 #include <cctype>
+#include "func.h"
+
+float inf = -5, sup = 5;
+void PanZoom();
 
 void drawPZ()
 {
@@ -19,4 +23,44 @@ void drawPZ()
   readimagefile("img/pz/plus.jpg", midx + 50, midy + 200, midx + 100, midy + 250);
   readimagefile("img/pz/minus.jpg", midx + 50, midy + 275, midx + 100, midy + 325);
   setfillstyle(SOLID_FILL, 0);
+}
+
+void drawFun()
+{
+  cleardevice();
+  drawPZ();
+  setfillstyle(SOLID_FILL, COLOR(190, 190, 190));
+  bar(0, 0, DRP, JOS);
+  desenare_axe(inf, sup);
+  desenare_grafic_functie(inf, sup, opt.color, 4);
+  PanZoom();
+}
+
+void PanZoom()
+{
+  int x = 0, y = 0;
+  int midx = getmaxx() - getmaxx() / 8, midy = getmaxy() / 2;
+  float center = (inf + sup) / 2;
+  float half_width = (sup - inf) / 2;
+  while (!((x > (midx + 50) && x < (midx + 100) && y > (midy + 200) && y < (midy + 250)) || // plus
+           (x > (midx + 50) && x < (midx + 100)) && y > (midy + 275) && y < (midy + 325)))  // minus
+  {
+
+    while (!ismouseclick(WM_LBUTTONDOWN))
+      ;
+    getmouseclick(WM_LBUTTONDOWN, x, y);
+  }
+
+  if (x > (midx + 50) && x < (midx + 100) && y > (midy + 200) && y < (midy + 250))
+  {
+    inf = center - (0.5 * half_width);
+    sup = center + (0.5 * half_width);
+  }
+  else if (x > (midx + 50) && x < (midx + 100) && y > (midy + 275) && y < (midy + 325))
+  {
+
+    inf = center - (2 * half_width);
+    sup = center + (2 * half_width);
+  }
+  drawFun();
 }

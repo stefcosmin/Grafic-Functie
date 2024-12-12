@@ -3,6 +3,7 @@
 #include <graphics.h>
 #include <winbgim.h>
 #include "settings.h"
+#include "drawgraph.h"
 #define font 8
 
 void clearBuffer(char *buffer)
@@ -225,7 +226,6 @@ void menu(char *t)
   }
   if (x > (midx - textwidth("YES") - 25) && x < (midx - 15) && y > (midy - 60 - textheight("YES")) && y < (midy - 50))
   {
-    float inf, sup;
     introduInfSup(inf, sup, t);
   }
   else if (x > (midx + 15) && x < (midx + textwidth("NU") + 25) && y > (midy - 60 - textheight("NU")) && y < (midy - 50))

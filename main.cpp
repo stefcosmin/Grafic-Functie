@@ -18,13 +18,7 @@ int main()
   init(func);
   menu(func);
   copieFun(func);
-  cleardevice();
-  drawPZ();
-
-  setfillstyle(SOLID_FILL, COLOR(190, 190, 190));
-  bar(0, 0, DRP, JOS);
-  desenare_grafic_functie(-2 * pi, 2 * pi, opt.color, 4);
-
+  drawFun();
   getch();
   closegraph();
   return 0;

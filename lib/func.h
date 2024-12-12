@@ -441,12 +441,13 @@ void desenare_axe(double A, double B)
   double dim, unitate, i;
   if (A < 0 && B > 0)
   {
+    setcolor(BLACK);
     dim = B - A;
     unitate = (DRP - STG) / dim;
     line(STG - A * unitate, SUS, STG - A * unitate, JOS); // OY
     // sagetile OY
-    line(STG - A * unitate - 7, SUS + 7, STG - A * unitate, SUS);
-    line(STG - A * unitate + 7, SUS + 7, STG - A * unitate, SUS);
+    line(STG - A * unitate - 2, SUS + 2, STG - A * unitate, SUS);
+    line(STG - A * unitate + 2, SUS + 2, STG - A * unitate, SUS);
 
     for (i = SUS + unitate; i <= JOS; i += unitate)
     {
@@ -454,8 +455,8 @@ void desenare_axe(double A, double B)
     }
     line(STG, SUS + (JOS - SUS) / 2, DRP, SUS + (JOS - SUS) / 2); // OX
     // sagetile OX
-    line(DRP - 7, SUS + (JOS - SUS) / 2 - 7, DRP, SUS + (JOS - SUS) / 2);
-    line(DRP - 7, SUS + (JOS - SUS) / 2 + 7, DRP, SUS + (JOS - SUS) / 2);
+    line(DRP - 2, SUS + (JOS - SUS) / 2 - 2, DRP, SUS + (JOS - SUS) / 2);
+    line(DRP - 2, SUS + (JOS - SUS) / 2 + 2, DRP, SUS + (JOS - SUS) / 2);
     dim = B - A;
     unitate = (DRP - STG) / dim;
     for (i = STG + unitate; i <= DRP; i += unitate)
