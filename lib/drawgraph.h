@@ -7,6 +7,7 @@
 #include "func.h"
 
 float inf = -5, sup = 5;
+float lower = 100001, upper = 100001;
 void PanZoom();
 
 void drawPZ()
@@ -31,8 +32,17 @@ void drawFun()
   drawPZ();
   setfillstyle(SOLID_FILL, COLOR(190, 190, 190));
   bar(0, 0, DRP, JOS);
-  desenare_axe(inf, sup);
-  desenare_grafic_functie(inf, sup, opt.color, 4);
+  if (lower == 100001 && upper == 100001)
+  {
+    desenare_axe(inf, sup);
+    desenare_grafic_functie(inf, sup, opt.color, 4);
+  }
+  else
+  {
+    desenare_axe(lower, upper);
+    desenare_grafic_functie(lower, upper, opt.color, 4);
+  }
+
   PanZoom();
 }
 
