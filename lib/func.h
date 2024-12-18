@@ -43,6 +43,7 @@ struct nod
   nod *urm;
 };
 nod *infixata, *postfixata, *S;
+
 void push(nod *&varf, char element)
 {
   nod *Stiva;
@@ -403,7 +404,7 @@ void minim_si_maxim_normalizate(double A, double B, double &minim, double &maxim
   }
 }
 
-void desenare_grafic_functie(double A, double B)
+void desenare_grafic_functie(double A, double B, int culoaregrafic)
 {
 
   int i;
@@ -435,6 +436,7 @@ void desenare_grafic_functie(double A, double B)
         setcolor(MAGENTA);
       rectangle(STG, SUS, DRP, JOS);
     }*/
+
     if (ypct == minim)
     {
       setcolor(WHITE);
@@ -447,7 +449,7 @@ void desenare_grafic_functie(double A, double B)
     }
     else
     {
-      setcolor(opt.color);
+      setcolor(culoaregrafic);
       line(xe, ye, xpct, ypct);
     }
     xe = xpct;
@@ -488,4 +490,5 @@ void desenare_axe(double A, double B)
 void copieFun(char *t)
 {
   strcpy(fun, t);
+  std::cout << fun << '\n';
 }

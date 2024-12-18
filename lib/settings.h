@@ -20,7 +20,7 @@ std::ofstream fout;
 struct settings
 {
   bool lang = 0; // 0-Romana, 1-Engleza
-  int color = 0;
+  int color1 = 0, color2 = 0;
 } opt;
 
 void select(short colorLeft, short colorTop);
@@ -39,13 +39,13 @@ void restore()
   fin.close();
 }
 
-void *makeBuffer(char *buffer)
+void makeBuffer(char *buffer)
 {
   switch (opt.lang)
   {
   case 0:
-    strcpy(buffer, "Culoarea graficului: ");
-    switch (opt.color)
+    strcpy(buffer, "Culoarea graficului principal: ");
+    switch (opt.color1)
     {
     case 0:
       strcat(buffer, "negru");
@@ -69,8 +69,64 @@ void *makeBuffer(char *buffer)
     break;
 
   case 1:
-    strcpy(buffer, "Graph's color: ");
-    switch (opt.color)
+    strcpy(buffer, "Primary graph's color: ");
+    switch (opt.color1)
+    {
+    case 0:
+      strcat(buffer, "black");
+      break;
+    case 1:
+      strcat(buffer, "blue");
+      break;
+    case 2:
+      strcat(buffer, "green");
+      break;
+    case 4:
+      strcat(buffer, "red");
+      break;
+    case 5:
+      strcat(buffer, "magenta");
+      break;
+    case 14:
+      strcat(buffer, "yellow");
+      break;
+    }
+    break;
+  }
+}
+
+void makesecBuffer(char *buffer)
+{
+  switch (opt.lang)
+  {
+  case 0:
+    strcpy(buffer, "Culoarea graficului secundar: ");
+    switch (opt.color2)
+    {
+    case 0:
+      strcat(buffer, "negru");
+      break;
+    case 1:
+      strcat(buffer, "albastru");
+      break;
+    case 2:
+      strcat(buffer, "verde");
+      break;
+    case 4:
+      strcat(buffer, "rosu");
+      break;
+    case 5:
+      strcat(buffer, "magenta");
+      break;
+    case 14:
+      strcat(buffer, "galben");
+      break;
+    }
+    break;
+
+  case 1:
+    strcpy(buffer, "Secondary graph's color: ");
+    switch (opt.color2)
     {
     case 0:
       strcat(buffer, "black");
@@ -107,12 +163,16 @@ void drawSettings()
     outtextxy(50, 50, "Limba: Romana");
     makeBuffer(buffer);
     outtextxy(50, 70, buffer);
+    makesecBuffer(buffer);
+    outtextxy(50, 90, buffer);
     break;
   case 1:
     outtextxy(20, 20, "Current options:");
     outtextxy(50, 50, "Language: English");
     makeBuffer(buffer);
     outtextxy(50, 70, buffer);
+    makesecBuffer(buffer);
+    outtextxy(50, 90, buffer);
     break;
   }
 }
@@ -211,25 +271,27 @@ void settingsMenu()
     outtextxy(20, 20, "Selectati limba:");
     outtextxy(120, 60, "Romana");
     outtextxy(120, 110, "Engleza");
-    outtextxy(500, 20, "Selectati culoarea graficului:");
-    left = 500 + textwidth("Selectati culoarea graficului:") / 2 - 260, top = 60;
+    outtextxy(500, 20, "Selectati culoarea graficului principal:");
+    left = 500 + textwidth("Selectati culoarea graficului principal:") / 2 - 260, top = 60;
     drawBars(left, top);
+    drawBars(left, top + 350);
     settextstyle(font, HORIZ_DIR, 5);
     setfillstyle(SOLID_FILL, 11);
-    bar(midx - textwidth("Inapoi la meniu") / 2 - 2, 460 - textheight("Inapoi la meniu") / 2 - 1, midx + textwidth("Inapoi la meniu") / 2 + 2, 460 + textheight("Inapoi la meniu") / 2 + 1);
-    outtextxy(midx - textwidth("Inapoi la meniu") / 2, 460 - textheight("Inapoi la meniu") / 2, "Inapoi la meniu");
+    bar(13, 460 - textheight("Inapoi la meniu") / 2 - 1, textwidth("Inapoi la meniu") + 17, 460 + textheight("Inapoi la meniu") / 2 + 1);
+    outtextxy(15, 460 - textheight("Inapoi la meniu") / 2, "Inapoi la meniu");
     break;
   case 1:
     outtextxy(20, 20, "Select language:");
     outtextxy(120, 60, "Romananian");
     outtextxy(120, 110, "English");
-    outtextxy(500, 20, "Select graph's color");
-    left = 500 + textwidth("Select graph's color") / 2 - 260, top = 60;
+    outtextxy(500, 20, "Select primary graph's color");
+    left = 500 + textwidth("Select primary graph's color") / 2 - 260, top = 60;
     drawBars(left, top);
+    drawBars(left, top + 350);
     settextstyle(font, HORIZ_DIR, 5);
     setfillstyle(SOLID_FILL, 11);
-    bar(midx - textwidth("Back to menu") / 2 - 2, 460 - textheight("Back to menu") / 2 - 1, midx + textwidth("Back to menu") / 2 + 2, 460 + textheight("Back to menu") / 2 + 1);
-    outtextxy(midx - textwidth("Back to menu") / 2, 460 - textheight("Back to menu") / 2, "Back to menu");
+    bar(13, 460 - textheight("Back to menu") / 2 - 1, textwidth("Back to menu") + 17, 460 + textheight("Back to menu") / 2 + 1);
+    outtextxy(15, 460 - textheight("Back to menu") / 2, "Back to menu");
     break;
   }
   settextstyle(font, HORIZ_DIR, 2);
@@ -267,15 +329,22 @@ void select(short colorLeft, short colorTop)
   short midx = getmaxx() / 2, midy = getmaxy() / 2;
   int x = 0, y = 0;
 
-  while (!((x > 40 && x < (120 + textwidth("Romanian")) && y > 40 && y < 86) ||
-           (x > 40 && x < 120 + textwidth("Engleza") && y > 100 && y < 136) ||
-           (x > colorLeft && x < colorLeft + 160 && y > colorTop && y < colorTop + 100) ||
-           (x > colorLeft + 180 && x < colorLeft + 340 && y > colorTop && y < colorTop + 100) ||
-           (x > colorLeft + 360 && x < colorLeft + 520 && y > colorTop && y < colorTop + 100) ||
-           (x > colorLeft && x < colorLeft + 160 && y > colorTop + 120 && y < colorTop + 220) ||
-           (x > colorLeft + 180 && x < colorLeft + 340 && y > colorTop + 120 && y < colorTop + 220) ||
-           (x > colorLeft + 360 && x < colorLeft + 520 && y > colorTop + 120 && y < colorTop + 220) ||
-           (x > (midx - textwidth("Inapoi la meniu") / 2) && x < (midx + textwidth("Inapoi la meniu") / 2) && y > (460 - textheight("Inapoi la meniu") / 2) && y < (460 + textheight("Inapoi la meniu") / 2))))
+  while (!((x > 40 && x < (120 + textwidth("Romanian")) && y > 40 && y < 86) ||                        // romana
+           (x > 40 && x < 120 + textwidth("Engleza") && y > 100 && y < 136) ||                         // engleza
+           (x > colorLeft && x < colorLeft + 160 && y > colorTop && y < colorTop + 100) ||             // 0  GRAFIC1
+           (x > colorLeft + 180 && x < colorLeft + 340 && y > colorTop && y < colorTop + 100) ||       // 1
+           (x > colorLeft + 360 && x < colorLeft + 520 && y > colorTop && y < colorTop + 100) ||       // 2
+           (x > colorLeft && x < colorLeft + 160 && y > colorTop + 120 && y < colorTop + 220) ||       // 4
+           (x > colorLeft + 180 && x < colorLeft + 340 && y > colorTop + 120 && y < colorTop + 220) || // 5
+           (x > colorLeft + 360 && x < colorLeft + 520 && y > colorTop + 120 && y < colorTop + 220) || // 14 FINAL GRAFIC1
+
+           (x > colorLeft && x < colorLeft + 160 && y > colorTop + 350 && y < colorTop + 350 + 100) ||             // 0  GRAFIC2
+           (x > colorLeft + 180 && x < colorLeft + 340 && y > colorTop + 350 && y < colorTop + 350 + 100) ||       // 1
+           (x > colorLeft + 360 && x < colorLeft + 520 && y > colorTop + 350 && y < colorTop + 350 + 100) ||       // 2
+           (x > colorLeft && x < colorLeft + 160 && y > colorTop + 350 + 120 && y < colorTop + 350 + 220) ||       // 4
+           (x > colorLeft + 180 && x < colorLeft + 340 && y > colorTop + 350 + 120 && y < colorTop + 350 + 220) || // 5
+           (x > colorLeft + 360 && x < colorLeft + 520 && y > colorTop + 350 + 120 && y < colorTop + 350 + 220) || // 14 FINAL GRAFIC2
+           (x > (13) && x < (400) && y > (460 - textheight("Inapoi la meniu") / 2) && y < (460 + textheight("Inapoi la meniu") / 2))))
   {
 
     while (!ismouseclick(WM_LBUTTONDOWN))
@@ -287,17 +356,30 @@ void select(short colorLeft, short colorTop)
   else if (x > 40 && x < 204 && y > 100 && y < 136)
     opt.lang = 1, save(), settingsMenu();
   else if (x > colorLeft && x < colorLeft + 160 && y > colorTop && y < colorTop + 100)
-    opt.color = 0, save(), settingsMenu();
+    opt.color1 = 0, save(), settingsMenu(); // GRAFIC1
   else if (x > colorLeft + 180 && x < colorLeft + 340 && y > colorTop && y < colorTop + 100)
-    opt.color = 1, save(), settingsMenu();
+    opt.color1 = 1, save(), settingsMenu();
   else if (x > colorLeft + 360 && x < colorLeft + 520 && y > colorTop && y < colorTop + 100)
-    opt.color = 2, save(), settingsMenu();
+    opt.color1 = 2, save(), settingsMenu();
   else if (x > colorLeft && x < colorLeft + 160 && y > colorTop + 120 && y < colorTop + 220)
-    opt.color = 4, save(), settingsMenu();
+    opt.color1 = 4, save(), settingsMenu();
   else if (x > colorLeft + 180 && x < colorLeft + 340 && y > colorTop + 120 && y < colorTop + 220)
-    opt.color = 5, save(), settingsMenu();
+    opt.color1 = 5, save(), settingsMenu();
   else if (x > colorLeft + 360 && x < colorLeft + 520 && y > colorTop + 120 && y < colorTop + 220)
-    opt.color = 14, save(), settingsMenu();
-  else if (x > (midx - textwidth("Inapoi la meniu") / 2) && x < (midx + textwidth("Inapoi la meniu") / 2) && y > (460 - textheight("Inapoi la meniu") / 2) && y < (460 + textheight("Inapoi la meniu") / 2))
+    opt.color1 = 14, save(), settingsMenu(); // FINAL GRAFIC1
+
+  else if (x > colorLeft && x < colorLeft + 160 && y > colorTop + 350 && y < colorTop + 350 + 100)
+    opt.color2 = 0, save(), settingsMenu(); // GRAFIC2
+  else if (x > colorLeft + 180 && x < colorLeft + 340 && y > colorTop + 350 && y < colorTop + 350 + 100)
+    opt.color2 = 1, save(), settingsMenu();
+  else if (x > colorLeft + 360 && x < colorLeft + 520 && y > colorTop + 350 && y < colorTop + 350 + 100)
+    opt.color2 = 2, save(), settingsMenu();
+  else if (x > colorLeft && x < colorLeft + 160 && y > colorTop + 350 + 120 && y < colorTop + 350 + 220)
+    opt.color2 = 4, save(), settingsMenu();
+  else if (x > colorLeft + 180 && x < colorLeft + 340 && y > colorTop + 350 + 120 && y < colorTop + 350 + 220)
+    opt.color2 = 5, save(), settingsMenu();
+  else if (x > colorLeft + 360 && x < colorLeft + 520 && y > colorTop + 350 + 120 && y < colorTop + 350 + 220)
+    opt.color2 = 14, save(), settingsMenu(); // FINAL GRAFIC2
+  else if (x > (13) && x < (400) && y > (460 - textheight("Inapoi la meniu") / 2) && y < (460 + textheight("Inapoi la meniu") / 2))
     start();
 }

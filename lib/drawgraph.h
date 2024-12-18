@@ -5,6 +5,7 @@
 #include <cmath>
 #include <cctype>
 #include "func.h"
+#include "settings.h"
 
 float inf = -5, sup = 5;
 float lower = 100001, upper = 100001;
@@ -25,29 +26,49 @@ void drawPZ()
   readimagefile("img/pz/minus.jpg", midx + 50, midy + 275, midx + 100, midy + 325);
   setfillstyle(SOLID_FILL, 0);
 }
+void background()
+{
+  setfillstyle(SOLID_FILL, COLOR(190, 190, 190));
+  bar(0, 0, getmaxx() - getmaxx() / 4, getmaxy());
+}
 
 void drawFun()
 {
-  cleardevice();
   drawPZ();
-  setfillstyle(SOLID_FILL, COLOR(190, 190, 190));
-  bar(0, 0, getmaxx() - getmaxx() / 4, getmaxy());
+  background();
   if (lower == 100001 && upper == 100001)
   {
     minim_si_maxim(inf, sup);
     GraphBorder(inf, sup);
     // printf("   maxim: %f   minim: %f", MAXI, MINI);
     desenare_axe(inf, sup);
-    desenare_grafic_functie(inf, sup);
+    desenare_grafic_functie(inf, sup, opt.color1);
   }
   else
   {
     minim_si_maxim(lower, upper);
     GraphBorder(lower, upper);
     desenare_axe(lower, upper);
-    desenare_grafic_functie(lower, upper);
+    desenare_grafic_functie(lower, upper, opt.color1);
   }
   PanZoom();
+}
+
+void drawFun(char *func1, char *func2)
+{
+  drawPZ();
+  background();
+  copieFun(func1);
+
+  minim_si_maxim(lower, upper);
+  GraphBorder(lower, upper);
+  desenare_axe(lower, upper);
+  desenare_grafic_functie(lower, upper, opt.color1);
+
+  copieFun(func2);
+  minim_si_maxim(lower, upper);
+  GraphBorder(lower, upper);
+  desenare_grafic_functie(lower, upper, opt.color2);
 }
 
 void PanZoom()
