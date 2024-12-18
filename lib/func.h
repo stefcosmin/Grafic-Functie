@@ -490,5 +490,4 @@ void desenare_axe(double A, double B)
 void copieFun(char *t)
 {
   strcpy(fun, t);
-  std::cout << fun << '\n';
 }

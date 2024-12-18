@@ -446,7 +446,6 @@ void introduInfSup(float &inf, float &sup, char *func1, char *func2)
     }
   }
   sup = atof(buffer);
-  std::cout << inf << " " << sup;
 }
 
 void menu(char *func1)

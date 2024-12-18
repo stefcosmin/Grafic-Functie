@@ -16,7 +16,6 @@ int main()
   initwindow(1280, 720, "Calculator grafic functie");
   start();
   init(func1, func2);
-  std::cout << strlen(func2);
   switch (strlen(func2))
   {
   case 0:
