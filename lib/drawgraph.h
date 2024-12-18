@@ -31,18 +31,22 @@ void drawFun()
   cleardevice();
   drawPZ();
   setfillstyle(SOLID_FILL, COLOR(190, 190, 190));
-  bar(0, 0, DRP, JOS);
+  bar(0, 0, getmaxx() - getmaxx() / 4, getmaxy());
   if (lower == 100001 && upper == 100001)
   {
+    minim_si_maxim(inf, sup);
+    GraphBorder(inf, sup);
+    printf("   maxim: %f   minim: %f", MAXI, MINI);
     desenare_axe(inf, sup);
-    desenare_grafic_functie(inf, sup, opt.color, 4);
+    desenare_grafic_functie(inf, sup);
   }
   else
   {
+    minim_si_maxim(lower, upper);
+    GraphBorder(lower, upper);
     desenare_axe(lower, upper);
-    desenare_grafic_functie(lower, upper, opt.color, 4);
+    desenare_grafic_functie(lower, upper);
   }
-
   PanZoom();
 }
 

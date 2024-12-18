@@ -11,6 +11,16 @@ void clearBuffer(char *buffer)
   for (int i = 0; i < 100; i++)
     buffer[i] = '\0';
 }
+
+void toLow(char *buffer)
+{
+  for (int i = 0; i < strlen(buffer); i++)
+  {
+    if (isalpha(buffer[i]) && isupper(buffer[i]))
+      buffer[i] = tolower(buffer[i]);
+  }
+}
+
 void init(char *buffer)
 {
   cleardevice();
@@ -47,6 +57,7 @@ void init(char *buffer)
       outtextxy(getmaxx() / 2 - textwidth(buffer) / 2, 80, buffer);
     }
   }
+  toLow(buffer);
 }
 
 void introduInfSup(float &inf, float &sup, char *t)

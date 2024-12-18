@@ -5,7 +5,7 @@
 #include <graphics.h>
 #include <winbgim.h>
 #include <string.h>
-#include <math.h>
+#include <cmath>
 #include <climits>
 #define pi 3.141592
 #define e 2.718281
@@ -15,11 +15,27 @@ char fun[256];
 char vect[256];
 int v[50];
 double MINI, MAXI, minim, maxim;
-int STG = 0, DRP = 0, SUS = 0, JOS = 0;
-void graphBorder()
+double dim;
+int unitate, midy, midx;
+int STG = 0, DRP = 960, SUS = 200, JOS = 520;
+
+void GraphBorder(double A, double B)
 {
-  DRP = getmaxx() - getmaxx() / 4, JOS = getmaxy();
+
+  dim = B - A;
+  int i;
+  unitate = (DRP - STG) / dim;
+
+  midx = getmaxx() / 2;
+  midy = getmaxy() / 2;
+  DRP = getmaxx() - getmaxx() / 4;
+  SUS = midy - abs(MAXI) * unitate;
+  STG = 0;
+  JOS = midy + abs(MINI) * unitate;
+  // printf("drp:%d   stg:%d   sus:%d   jos:%d  midy:%d", DRP, STG, SUS, JOS, midy);
+  // printf("     absmini:%f     unitate:%f", abs(MINI), unitate);
 }
+
 struct nod
 {
   char inf;
@@ -340,7 +356,7 @@ double v_functie(double x)
 {
   transformare_functie();
   transformare_din_infix_in_postfix();
-  return -1 * calculare_val_fct_din_postf(x);
+  return calculare_val_fct_din_postf(x);
 }
 
 int discontinuitate(double x)
@@ -386,8 +402,10 @@ void minim_si_maxim_normalizate(double A, double B, double &minim, double &maxim
     maxim = max(maxim, ypct);
   }
 }
-void desenare_grafic_functie(double A, double B, int culoaregrafic, int culoarechenar)
+
+void desenare_grafic_functie(double A, double B)
 {
+
   int i;
   double x, y, xe, ye, xpct, ypct;
   minim_si_maxim_normalizate(A, B, minim, maxim);
@@ -401,8 +419,9 @@ void desenare_grafic_functie(double A, double B, int culoaregrafic, int culoarec
     x = A + i * (B - A) / (DRP - STG);
     y = v_functie(x);
     xpct = (DRP - STG) * x / (B - A) + (B * STG - A * DRP) / (B - A);
-    ypct = (JOS - SUS) * y / (MAXI - MINI) + (MAXI * SUS - MINI * JOS) / (MAXI - MINI);
-    if (discontinuitate(x))
+    ypct = JOS - (JOS - SUS) * (y - MINI) / (MAXI - MINI);
+
+    /*if (discontinuitate(x))
     {
       setcolor(COLOR(18, 18, 18));
       // line(xe, SUS + 2, xe, JOS - 2);
@@ -415,7 +434,7 @@ void desenare_grafic_functie(double A, double B, int culoaregrafic, int culoarec
       else if (culoarechenar == 4)
         setcolor(MAGENTA);
       rectangle(STG, SUS, DRP, JOS);
-    }
+    }*/
     if (ypct == minim)
     {
       setcolor(WHITE);
@@ -428,7 +447,7 @@ void desenare_grafic_functie(double A, double B, int culoaregrafic, int culoarec
     }
     else
     {
-      setcolor(culoaregrafic);
+      setcolor(opt.color);
       line(xe, ye, xpct, ypct);
     }
     xe = xpct;
@@ -438,31 +457,30 @@ void desenare_grafic_functie(double A, double B, int culoaregrafic, int culoarec
 
 void desenare_axe(double A, double B)
 {
-  double dim, unitate, i;
-  if (A < 0 && B > 0)
-  {
-    setcolor(BLACK);
-    dim = B - A;
-    unitate = (DRP - STG) / dim;
-    line(STG - A * unitate, SUS, STG - A * unitate, JOS); // OY
-    // sagetile OY
-    line(STG - A * unitate - 2, SUS + 2, STG - A * unitate, SUS);
-    line(STG - A * unitate + 2, SUS + 2, STG - A * unitate, SUS);
+  int SUS = 0, STG = 0, JOS = getmaxy(), DRP = getmaxx() - getmaxx() / 4;
+  setcolor(BLACK);
+  line(STG - A * unitate, SUS, STG - A * unitate, JOS); // OY
+  // sagetile OY
+  line(STG - A * unitate - 2, SUS + 2, STG - A * unitate, SUS);
+  line(STG - A * unitate + 2, SUS + 2, STG - A * unitate, SUS);
+  int i;
+  i = midy;
+  while (i <= JOS)
+    line(STG - A * unitate - 2, i, STG - A * unitate + 2, i), i += unitate;
+  i = midy;
+  while (i >= SUS)
+    line(STG - A * unitate - 2, i, STG - A * unitate + 2, i), i -= unitate;
+  // final oy
 
-    for (i = SUS + unitate; i <= JOS; i += unitate)
-    {
-      line(STG - A * unitate - 2, i, STG - A * unitate + 2, i);
-    }
-    line(STG, SUS + (JOS - SUS) / 2, DRP, SUS + (JOS - SUS) / 2); // OX
-    // sagetile OX
-    line(DRP - 2, SUS + (JOS - SUS) / 2 - 2, DRP, SUS + (JOS - SUS) / 2);
-    line(DRP - 2, SUS + (JOS - SUS) / 2 + 2, DRP, SUS + (JOS - SUS) / 2);
-    dim = B - A;
-    unitate = (DRP - STG) / dim;
-    for (i = STG + unitate; i <= DRP; i += unitate)
-    {
-      line(i, SUS + (JOS - SUS) / 2 - 2, i, SUS + (JOS - SUS) / 2 + 2);
-    }
+  line(STG, SUS + (JOS - SUS) / 2, DRP, SUS + (JOS - SUS) / 2); // OX
+  // sagetile OX
+  line(DRP - 2, SUS + (JOS - SUS) / 2 - 2, DRP, SUS + (JOS - SUS) / 2);
+  line(DRP - 2, SUS + (JOS - SUS) / 2 + 2, DRP, SUS + (JOS - SUS) / 2);
+  dim = B - A;
+  unitate = (DRP - STG) / dim;
+  for (int i = STG + unitate; i <= DRP; i += unitate)
+  {
+    line(i, SUS + (JOS - SUS) / 2 - 2, i, SUS + (JOS - SUS) / 2 + 2);
   }
 }
 

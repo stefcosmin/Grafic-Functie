@@ -13,7 +13,6 @@ char func[100];
 int main()
 {
   initwindow(1280, 720, "Calculator grafic functie");
-  graphBorder();
   start();
   init(func);
   menu(func);
