@@ -36,7 +36,7 @@ void drawFun()
   {
     minim_si_maxim(inf, sup);
     GraphBorder(inf, sup);
-    printf("   maxim: %f   minim: %f", MAXI, MINI);
+    // printf("   maxim: %f   minim: %f", MAXI, MINI);
     desenare_axe(inf, sup);
     desenare_grafic_functie(inf, sup);
   }

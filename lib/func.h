@@ -459,6 +459,7 @@ void desenare_axe(double A, double B)
 {
   int SUS = 0, STG = 0, JOS = getmaxy(), DRP = getmaxx() - getmaxx() / 4;
   setcolor(BLACK);
+
   line(STG - A * unitate, SUS, STG - A * unitate, JOS); // OY
   // sagetile OY
   line(STG - A * unitate - 2, SUS + 2, STG - A * unitate, SUS);
