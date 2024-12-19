@@ -1,4 +1,3 @@
-#pragma once
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
@@ -10,6 +9,7 @@
 #define pi 3.141592
 #define e 2.718281
 #define epsilon 0.000001
+#define infinit ULLONG_MAX
 using namespace std;
 char fun[256];
 char vect[256];
@@ -348,7 +348,6 @@ int discontinuitate(double x)
   else
     return 0; // f continua
 }
-
 void minim_si_maxim(double A, double B) // aflam minimul si maximul functiei
 {
   double x, y;
@@ -362,7 +361,6 @@ void minim_si_maxim(double A, double B) // aflam minimul si maximul functiei
     MINI = min(MINI, y);
   }
 }
-
 void minim_si_maxim_normalizate(double A, double B, double &minim, double &maxim)
 { // aflam minimul si maximul functiei transformate in coordonate pe ecran
   double x, y, ypct;
@@ -464,16 +462,292 @@ void desenare_axe(double A, double B)
     }
   }
 }
+void conversie_sir_caractere_in_numar(int n, char *buffer)
+{
+  sprintf(buffer, "%d", n);
+}
+int origx, origy;
+double distanta, unit;
+void desenare_axe(double A, double B, int &origx, int &origy, double &distanta, double &unit)
+{
+
+  origx = (STG + DRP) / 2;
+  origy = (SUS + JOS) / 2;
+  distanta = B - A;
+  unit = min((DRP - STG) / (2 * distanta), (JOS - SUS) / (2 * distanta));
+  setcolor(WHITE);
+  // trasare axe
+  line(origx, SUS, origx, JOS);
+  line(STG, origy, DRP, origy);
+  // trasare sageti axe
+  line(origx - 7, SUS + 7, origx, SUS);
+  line(origx + 7, SUS + 7, origx, SUS);
+  line(DRP - 7, origy, DRP, origy);
+  line(DRP - 7, origy + 7, DRP, origy);
+  char buffer[20];
+  // marcajele pe axa ox
+  for (int i = ceil(-distanta); i <= floor(distanta); i += 2)
+  {
+    int xm = origx + i * unit;
+    if (xm >= STG && xm <= DRP)
+    {
+      line(xm, origy - 5, xm, origy + 5);
+      if (i != 0)
+      {
+        conversie_sir_caractere_in_numar(i, buffer);
+        outtextxy(xm - 10, origy + 10, buffer);
+      }
+    }
+  }
+  // marcajele pe oy
+  for (int i = ceil(-distanta); i <= floor(distanta); i += 2)
+  {
+    int ym = origy - i * unit;
+    if (ym >= SUS && ym <= JOS)
+    {
+      line(origx - 5, ym, origx + 5, ym);
+      if (i != 0)
+      {
+        conversie_sir_caractere_in_numar(i, buffer);
+        outtextxy(origx + 10, ym - 5, buffer);
+      }
+    }
+  }
+}
+
+void traseaza_grafic(double A, double B, int culoaregrafic, int culoarechenar)
+{
+  desenare_axe(A, B, origx, origy, distanta, unit);
+  minim_si_maxim_normalizate(A, B, minim, maxim);
+  minim_si_maxim(A, B);
+  setcolor(culoaregrafic);
+  double pas = (2 * distanta) / (DRP - STG);
+  double x = -distanta, y;
+  int xa = origx + x * unit;
+  int ya = origy - v_functie(x) * unit;
+  for (int i = 1; i <= (DRP - STG); i++)
+  {
+    x += pas;
+    y = v_functie(x);
+    int xpctact = origx + x * unit;
+    int ypctact = origy - y * unit;
+    if (xpctact >= minim && xpctact <= DRP && xa >= minim && xa <= DRP && ypctact >= SUS && ypctact <= JOS && ya >= SUS && ya <= JOS)
+      line(xa, ya, xpctact, ypctact);
+    if (xpctact == minim)
+    {
+      setcolor(WHITE);
+      line(xa, ya, xpctact, ypctact);
+    }
+    else if (ypctact == maxim)
+    {
+      setcolor(WHITE);
+      line(xa, ya, xpctact, ypctact);
+    }
+    xa = xpctact;
+    ya = ypctact;
+  }
+  setcolor(culoarechenar);
+  rectangle(STG, SUS, DRP, JOS);
+}
+
+double calculare_integrala_functie(double A, double B, double (*f)(double))
+{
+  if ((B - A) < epsilon)
+    return (B - A) * ((*f)(A) + (*f)(B)) / 2.0;
+  else
+  {
+    double punct = (A + B) / 2.0;
+    return calculare_integrala_functie(A, punct, f) + calculare_integrala_functie(punct, B, f);
+  }
+}
+char temp[256];
+
+double asimptota_orizontala()
+{
+  double c, a, b, k, l, ok = 0;
+  int i, j, ok1 = 0;
+  if (strchr(temp, '/') && !strchr(temp, 's') && !strchr(temp, 'c') && !strchr(temp, 'l') && !strchr(temp, 'r') && !strchr(temp, 't'))
+  {
+    for (i = 0; i <= strlen(temp) - 1; i++)
+      if (temp[i] != '/')
+      {
+        if (temp[i] == 'x' && ok == 0)
+        {
+          if (temp[i + 1] == '^')
+          {
+            k = temp[i + 2] - '0';
+            ok = 1;
+          }
+          else
+          {
+            k = 1;
+            ok = 1;
+          }
+          if (temp[i - 1] == '*')
+          {
+            a = temp[i - 2] - '0';
+          }
+          else
+            a = 1;
+        }
+      }
+      else
+        break;
+
+    for (j = i + 1; j <= strlen(temp) - 1; j++)
+      if (temp[j] == 'x' && ok1 == 0)
+      {
+        if (temp[j + 1] == '^')
+        {
+          l = temp[j + 2] - '0';
+          ok1 = 1;
+        }
+        else
+        {
+          l = 1;
+          ok1 = 1;
+        }
+        if (temp[j - 1] == '*')
+          b = temp[j - 2] - '0';
+        else
+          b = 1;
+      }
+    if (k == l)
+      c = a / b;
+    else if (k < l)
+      c = 0;
+    else
+      c = epsilon;
+    if (c == floor(c))
+      return c;
+    else
+      return infinit;
+  }
+}
+
+double asimptota_verticala()
+{
+  double c, a = 0, b = 0;
+  int i, j, ok1 = 0;
+  if (strchr(temp, '/') && !strchr(temp, 's') && !strchr(temp, 'c') && !strchr(temp, 'l') && !strchr(temp, 'r') && !strchr(temp, 't'))
+  {
+    for (i = 0; i <= strlen(temp) - 1; i++)
+      if (temp[i] == '/')
+        break;
+    for (j = strlen(temp) - 1; j >= i + 1; j--)
+      if (isdigit(temp[j]) && temp[j - 1] != '^' && ok1 == 0)
+      {
+        if (temp[j - 1] == '-')
+        {
+          a = temp[j] - '0';
+          a = -a;
+          ok1++;
+        }
+        else
+        {
+          a = temp[j] - '0';
+          ok1++;
+        }
+      }
+      else if (temp[j] == 'x' && temp[j - 1] != '*' && ok1 == 0)
+      {
+        if (temp[j - 1] == '+')
+        {
+          a = 1;
+          ok1++;
+        }
+        else if (temp[j - 1] == '-')
+        {
+          a = -1;
+          ok1++;
+        }
+      }
+      else if (isdigit(temp[j]) && temp[j - 1] != '^' && ok1 == 1)
+      {
+        if (temp[j - 1] == '-')
+        {
+          b = temp[j] - '0';
+          b = -b;
+          ok1++;
+        }
+        else
+        {
+          b = temp[j] - '0';
+          ok1++;
+        }
+      }
+      else if (temp[j] == 'x' && temp[j - 1] != '*' && ok1 == 1)
+      {
+        if (temp[j - 1] == '-')
+        {
+          b = -1;
+          ok1++;
+        }
+        else
+        {
+          b = 1;
+          ok1++;
+        }
+      }
+
+    if (b != 0)
+      c = (-a) / b;
+    else
+      c = -a;
+    return c;
+  }
+}
+
+void desenare_asimptote(double A, double B)
+{
+  double dim, unitate, unitate1, punctmijloc1, punctmijloc;
+  dim = B - A;
+  unitate = (SUS + JOS) / dim;
+  punctmijloc = (SUS + JOS) / 2;
+  int c = asimptota_orizontala();
+  c = c * unitate;
+  std::cout << "c: " << c << "\n";
+  if (c != epsilon && c != infinit)
+  {
+    setcolor(GREEN);
+    line(STG, punctmijloc - c, DRP, punctmijloc - c);
+  }
+  if (A < 0 && B > 0)
+  {
+    dim = B - A;
+    if (c != 0 || c == infinit)
+    {
+      unitate1 = (STG + DRP) / dim;
+      punctmijloc1 = (STG + DRP) / 2;
+      int a = asimptota_verticala();
+      a = a * unitate;
+      setcolor(BLUE);
+      line(punctmijloc - a, SUS, punctmijloc - a, JOS);
+    }
+  }
+}
 
 int main()
 {
+  double A, B;
   cin.getline(fun, 256);
-  double minim, maxim;
-  minim_si_maxim(0, 2 * pi);
-  minim_si_maxim_normalizate(0, 2 * pi, minim, maxim);
-  cout << "MINIM: " << MINI << " " << minim << '\n';
-  cout << "MAXIM: " << MAXI << " " << maxim;
-  desenare_grafic_functie(0, 2 * pi, 2, 4);
+  strcpy(temp, fun);
+  /*cout<<"Introduceti intervalul: "<<'\n';
+  cout<<"MINIM: "<<'\n';
+  cin>>A;
+  cout<<"MAXIM: "<<'\n';
+  cin>>B;
+  */
+  // cout << "VALOAREA INTEGRALEI ESTE: " << calculare_integrala_functie(0, 1, &v_functie);
+
+  /*double minim, maxim;
+  minim_si_maxim(-2*pi,2*pi);
+  minim_si_maxim_normalizate(-2*pi,2*pi,minim,maxim);
+  cout<<"MINIM: "<<MINI<<" "<<minim<<'\n';
+  cout<<"MAXIM: "<<MAXI<<" "<<maxim;*/
+  initwindow(1350, 700);
+  traseaza_grafic(-3.14, 3.14, 4, 2);
+  desenare_asimptote(-10, 10);
   getch();
   closegraph();
   return 0;

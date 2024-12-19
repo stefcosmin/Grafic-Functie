@@ -24,8 +24,11 @@ void drawPZ()
 
   readimagefile("img/pz/plus.jpg", midx + 50, midy + 200, midx + 100, midy + 250);
   readimagefile("img/pz/minus.jpg", midx + 50, midy + 275, midx + 100, midy + 325);
+  readimagefile("img/pz/plus.jpg", midx + 50, midy + 200, midx + 100, midy + 250);
+  readimagefile("img/pz/save.jpg", midx - 10, midy - 325, midx + 50, midy - 275);
   setfillstyle(SOLID_FILL, 0);
 }
+
 void background()
 {
   setfillstyle(SOLID_FILL, COLOR(190, 190, 190));
@@ -43,6 +46,7 @@ void drawFun()
     // printf("   maxim: %f   minim: %f", MAXI, MINI);
     desenare_axe(inf, sup);
     desenare_grafic_functie(inf, sup, opt.color1);
+    desenare_asimptote(inf, sup);
   }
   else
   {
@@ -50,6 +54,7 @@ void drawFun()
     GraphBorder(lower, upper);
     desenare_axe(lower, upper);
     desenare_grafic_functie(lower, upper, opt.color1);
+    desenare_asimptote(lower, upper);
   }
   PanZoom();
 }
@@ -83,7 +88,8 @@ void PanZoom()
   while (!((x > (midx + 50) && x < (midx + 100) && y > (midy + 200) && y < (midy + 250)) ||   // plus
            ((x > (midx + 50) && x < (midx + 100)) && y > (midy + 275) && y < (midy + 325)) || // minus
            (x > (midx - 90) && x < (midx - 40) && y > (midy) && y < (midy + 50)) ||           // stanga
-           (x > (midx + 50) && x < (midx + 100) && y > (midy) && y < (midy + 50))))           // dreapta
+           (x > (midx + 50) && x < (midx + 100) && y > (midy) && y < (midy + 50)) ||          // dreapta
+           (x > (midx - 10) && x < (midx + 50) && y > (midy - 325) && y < (midy - 275))))     // save
   {
 
     while (!ismouseclick(WM_LBUTTONDOWN))
@@ -111,6 +117,11 @@ void PanZoom()
   {
     inf += dif / 8;
     sup += dif / 8;
+  }
+  else if (x > (midx - 10) && x < (midx + 50) && y > (midy - 325) && y < (midy - 275))
+  {
+    writeimagefile(NULL, 0, 0, getmaxx() - getmaxx() / 4, getmaxy());
+    drawPZ();
   }
 
   drawFun();

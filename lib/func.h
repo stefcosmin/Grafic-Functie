@@ -1,15 +1,16 @@
 #pragma once
 #include <iostream>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdlib>
+#include <cstdio>
 #include <graphics.h>
 #include <winbgim.h>
-#include <string.h>
+#include <cstring>
 #include <cmath>
 #include <climits>
 #define pi 3.141592
 #define e 2.718281
 #define epsilon 0.000001
+#define infinit ULLONG_MAX
 using namespace std;
 char fun[256];
 char vect[256];
@@ -247,6 +248,7 @@ void transformare_functie()
     if (vect[i] != ' ')
       inserare(infixata, vect[i]);
 }
+
 int prioritate_caracter(char a)
 {
   if (strchr("+", a) || strchr("-", a))
@@ -459,6 +461,8 @@ void desenare_grafic_functie(double A, double B, int culoaregrafic)
 
 void desenare_axe(double A, double B)
 {
+  dim = B - A;
+  unitate = (DRP - STG) / dim;
   int SUS = 0, STG = 0, JOS = getmaxy(), DRP = getmaxx() - getmaxx() / 4;
   setcolor(BLACK);
 
@@ -479,15 +483,180 @@ void desenare_axe(double A, double B)
   // sagetile OX
   line(DRP - 2, SUS + (JOS - SUS) / 2 - 2, DRP, SUS + (JOS - SUS) / 2);
   line(DRP - 2, SUS + (JOS - SUS) / 2 + 2, DRP, SUS + (JOS - SUS) / 2);
-  dim = B - A;
-  unitate = (DRP - STG) / dim;
+
   for (int i = STG + unitate; i <= DRP; i += unitate)
   {
     line(i, SUS + (JOS - SUS) / 2 - 2, i, SUS + (JOS - SUS) / 2 + 2);
   }
 }
 
+char temp[256] = "";
+
+double asimptota_orizontala()
+{
+  double c, a, b, k, l, ok = 0;
+  int i, j, ok1 = 0;
+  if (strchr(temp, '/') && !strchr(temp, 's') && !strchr(temp, 'c') && !strchr(temp, 'l') && !strchr(temp, 'r') && !strchr(temp, 't'))
+  {
+    for (i = 0; i <= strlen(temp) - 1; i++)
+      if (temp[i] != '/')
+      {
+        if (temp[i] == 'x' && ok == 0)
+        {
+          if (temp[i + 1] == '^')
+          {
+            k = temp[i + 2] - '0';
+            ok = 1;
+          }
+          else
+          {
+            k = 1;
+            ok = 1;
+          }
+          if (temp[i - 1] == '*')
+          {
+            a = temp[i - 2] - '0';
+          }
+          else
+            a = 1;
+        }
+      }
+      else
+        break;
+
+    for (j = i + 1; j <= strlen(temp) - 1; j++)
+      if (temp[j] == 'x' && ok1 == 0)
+      {
+        if (temp[j + 1] == '^')
+        {
+          l = temp[j + 2] - '0';
+          ok1 = 1;
+        }
+        else
+        {
+          l = 1;
+          ok1 = 1;
+        }
+        if (temp[j - 1] == '*')
+          b = temp[j - 2] - '0';
+        else
+          b = 1;
+      }
+    if (k == l)
+      c = a / b;
+    else if (k < l)
+      c = 0;
+    else
+      c = epsilon;
+    if (c == floor(c))
+      return c;
+    else
+      return infinit;
+  }
+}
+
+double asimptota_verticala()
+{
+  double c, a = 0, b = 0;
+  int i, j, ok1 = 0;
+  if (strchr(temp, '/') && !strchr(temp, 's') && !strchr(temp, 'c') && !strchr(temp, 'l') && !strchr(temp, 'r') && !strchr(temp, 't'))
+  {
+    for (i = 0; i <= strlen(temp) - 1; i++)
+      if (temp[i] == '/')
+        break;
+    for (j = strlen(temp) - 1; j >= i + 1; j--)
+      if (isdigit(temp[j]) && temp[j - 1] != '^' && ok1 == 0)
+      {
+        if (temp[j - 1] == '-')
+        {
+          a = temp[j] - '0';
+          a = -a;
+          ok1++;
+        }
+        else
+        {
+          a = temp[j] - '0';
+          ok1++;
+        }
+      }
+      else if (temp[j] == 'x' && temp[j - 1] != '*' && ok1 == 0)
+      {
+        if (temp[j - 1] == '+')
+        {
+          a = 1;
+          ok1++;
+        }
+        else if (temp[j - 1] == '-')
+        {
+          a = -1;
+          ok1++;
+        }
+      }
+      else if (isdigit(temp[j]) && temp[j - 1] != '^' && ok1 == 1)
+      {
+        if (temp[j - 1] == '-')
+        {
+          b = temp[j] - '0';
+          b = -b;
+          ok1++;
+        }
+        else
+        {
+          b = temp[j] - '0';
+          ok1++;
+        }
+      }
+      else if (temp[j] == 'x' && temp[j - 1] != '*' && ok1 == 1)
+      {
+        if (temp[j - 1] == '-')
+        {
+          b = -1;
+          ok1++;
+        }
+        else
+        {
+          b = 1;
+          ok1++;
+        }
+      }
+
+    if (b != 0)
+      c = (-a) / b;
+    else
+      c = -a;
+    return c;
+  }
+}
+
+void desenare_asimptote(double A, double B)
+{
+
+  double unitate1, punctmijloc1, punctmijloc;
+  int SUS = 0, STG = 0, JOS = getmaxy(), DRP = getmaxx() - getmaxx() / 4;
+  punctmijloc = (SUS + JOS) / 2;
+  int c = asimptota_orizontala();
+
+  c *= unitate;
+
+  if (c != epsilon && c != infinit)
+  {
+    setcolor(GREEN);
+    line(STG, punctmijloc - c, DRP, punctmijloc - c);
+  }
+
+  if (c != 0 || c == infinit)
+  {
+    unitate1 = (STG + DRP) / dim;
+    punctmijloc1 = (STG + DRP) / 2;
+    int a = asimptota_verticala();
+    a = a * unitate;
+    setcolor(BLUE);
+    line(punctmijloc1 - a, SUS, punctmijloc1 - a, JOS);
+  }
+}
+
 void copieFun(char *t)
 {
   strcpy(fun, t);
+  strcpy(temp, fun);
 }
