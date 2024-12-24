@@ -473,10 +473,26 @@ void desenare_axe(double A, double B)
   int i;
   i = midy;
   while (i <= JOS)
-    line(STG - A * unitate - 2, i, STG - A * unitate + 2, i), i += unitate;
-  i = midy;
+  {
+    char buffer[10] = "";
+    sprintf(buffer, "%d", (midy - i) / unitate - 1);
+    line(STG - A * unitate - 2, i, STG - A * unitate + 2, i);
+    i += unitate;
+    settextstyle(font, HORIZ_DIR, 1);
+    setbkcolor(COLOR(190, 190, 190));
+    outtextxy(STG - A * unitate + 2, i, buffer);
+  }
+  i = midy + unitate;
   while (i >= SUS)
-    line(STG - A * unitate - 2, i, STG - A * unitate + 2, i), i -= unitate;
+  {
+    char buffer[10] = "";
+    sprintf(buffer, "%d", (midy - i) / unitate);
+    line(STG - A * unitate - 2, i, STG - A * unitate + 2, i);
+    settextstyle(font, HORIZ_DIR, 1);
+    setbkcolor(COLOR(190, 190, 190));
+    outtextxy(STG - A * unitate + 2, i, buffer);
+    i -= unitate;
+  }
   // final oy
 
   line(STG, SUS + (JOS - SUS) / 2, DRP, SUS + (JOS - SUS) / 2); // OX
@@ -486,7 +502,13 @@ void desenare_axe(double A, double B)
 
   for (int i = STG + unitate; i <= DRP; i += unitate)
   {
+    char buffer[10] = "";
+    // sprintf(buffer, "%d", (i - STG) / unitate);
     line(i, SUS + (JOS - SUS) / 2 - 2, i, SUS + (JOS - SUS) / 2 + 2);
+
+    // settextstyle(font, HORIZ_DIR, 1);
+    // setbkcolor(COLOR(190, 190, 190));
+    // outtextxy(i, SUS + (SUS - JOS) / 2 - 4, buffer);
   }
 }
 

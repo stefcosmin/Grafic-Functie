@@ -74,6 +74,20 @@ void drawFun(char *func1, char *func2)
   minim_si_maxim(lower, upper);
   GraphBorder(lower, upper);
   desenare_grafic_functie(lower, upper, opt.color2);
+
+  int x = 0, y = 0, midx = getmaxx() - getmaxx() / 8, midy = getmaxy() / 2;
+  while (!(x > (midx - 10) && x < (midx + 50) && y > (midy - 325) && y < (midy - 275))) // save
+  {
+
+    while (!ismouseclick(WM_LBUTTONDOWN))
+      ;
+    getmouseclick(WM_LBUTTONDOWN, x, y);
+  }
+  std::cout << x << y;
+  if (x > (midx - 10) && x < (midx + 50) && y > (midy - 325) && y < (midy - 275))
+  {
+    writeimagefile(NULL, 0, 0, getmaxx() - getmaxx() / 4, getmaxy());
+  }
 }
 
 void PanZoom()
