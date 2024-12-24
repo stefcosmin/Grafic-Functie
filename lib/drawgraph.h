@@ -95,7 +95,8 @@ void PanZoom()
   int x = 0, y = 0;
   int midx = getmaxx() - getmaxx() / 8, midy = getmaxy() / 2;
 
-  float center = (inf + sup) / 2; // var de calcul
+  // var de calcul
+  float center = (inf + sup) / 2;
   float dif = sup - inf;
   float half_width = dif / 2;
 
@@ -103,7 +104,8 @@ void PanZoom()
            ((x > (midx + 50) && x < (midx + 100)) && y > (midy + 275) && y < (midy + 325)) || // minus
            (x > (midx - 90) && x < (midx - 40) && y > (midy) && y < (midy + 50)) ||           // stanga
            (x > (midx + 50) && x < (midx + 100) && y > (midy) && y < (midy + 50)) ||          // dreapta
-           (x > (midx - 10) && x < (midx + 50) && y > (midy - 325) && y < (midy - 275))))     // save
+           (x > (midx - 20) && x < (midx + 30) && y > (midy + 70) && y < (midy + 120)) ||     // jos
+           (x > (midx - 20) && x < (midx + 30) && y > (midy - 70) && y < (midy - 20))))       // sus
   {
 
     while (!ismouseclick(WM_LBUTTONDOWN))
@@ -111,31 +113,30 @@ void PanZoom()
     getmouseclick(WM_LBUTTONDOWN, x, y);
   }
 
-  if (x > (midx + 50) && x < (midx + 100) && y > (midy + 200) && y < (midy + 250)) // minus
+  if (x > (midx + 50) && x < (midx + 100) && y > (midy + 200) && y < (midy + 250)) // plus
   {
-    inf = center - (0.5 * half_width);
-    sup = center + (0.5 * half_width);
+    inf = center - (0.5 * half_width), sup = center + (0.5 * half_width);
   }
-  else if (x > (midx + 50) && x < (midx + 100) && y > (midy + 275) && y < (midy + 325)) // plus
+  else if (x > (midx + 50) && x < (midx + 100) && y > (midy + 275) && y < (midy + 325)) // minus
   {
-
-    inf = center - (2 * half_width);
-    sup = center + (2 * half_width);
+    if ((center + (2 * half_width) - (center - (2 * half_width))) < 500)
+      inf = center - (2 * half_width), sup = center + (2 * half_width);
   }
   else if (x > (midx - 90) && x < (midx - 40) && y > (midy) && y < (midy + 50)) // stanga
   {
-    inf -= dif / 8;
-    sup -= dif / 8;
+    inf -= dif / 8, sup -= dif / 8;
   }
   else if (x > (midx + 50) && x < (midx + 100) && y > (midy) && y < (midy + 50)) // dreapta
   {
-    inf += dif / 8;
-    sup += dif / 8;
+    inf += dif / 8, sup += dif / 8;
   }
-  else if (x > (midx - 10) && x < (midx + 50) && y > (midy - 325) && y < (midy - 275))
+  else if (x > (midx - 20) && x < (midx + 30) && y > (midy + 70) && y < (midy + 120)) // jos
   {
-    writeimagefile(NULL, 0, 0, getmaxx() - getmaxx() / 4, getmaxy());
-    drawPZ();
+    yoffset -= getmaxy() / 8;
+  }
+  else if (x > (midx - 20) && x < (midx + 30) && y > (midy - 70) && y < (midy - 20)) // sus
+  {
+    yoffset += getmaxy() / 8;
   }
 
   drawFun();

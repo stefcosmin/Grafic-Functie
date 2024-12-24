@@ -17,22 +17,23 @@ char vect[256];
 int v[50];
 double MINI, MAXI, minim, maxim;
 double dim;
-int unitate, midy, midx;
-int STG = 0, DRP = 960, SUS = 200, JOS = 520;
+int unitate, midy, midx, width;
+int STG = 0, DRP = 0, SUS = 0, JOS = 0, yoffset = 0;
 
 void GraphBorder(double A, double B)
 {
 
   dim = B - A;
   int i;
-  unitate = (DRP - STG) / dim;
+  width = DRP - STG;
+  unitate = width / dim;
 
   midx = getmaxx() / 2;
   midy = getmaxy() / 2;
   DRP = getmaxx() - getmaxx() / 4;
-  SUS = midy - abs(MAXI) * unitate;
+  SUS = midy - abs(MAXI) * unitate + yoffset;
   STG = 0;
-  JOS = midy + abs(MINI) * unitate;
+  JOS = midy + abs(MINI) * unitate + yoffset;
   // printf("drp:%d   stg:%d   sus:%d   jos:%d  midy:%d", DRP, STG, SUS, JOS, midy);
   // printf("     absmini:%f     unitate:%f", abs(MINI), unitate);
 }
@@ -475,41 +476,127 @@ void desenare_axe(double A, double B)
   while (i <= JOS)
   {
     char buffer[10] = "";
-    sprintf(buffer, "%d", (midy - i) / unitate - 1);
+    sprintf(buffer, "%d", (midy - i + yoffset) / unitate);
     line(STG - A * unitate - 2, i, STG - A * unitate + 2, i);
-    i += unitate;
     settextstyle(font, HORIZ_DIR, 1);
     setbkcolor(COLOR(190, 190, 190));
-    outtextxy(STG - A * unitate + 2, i, buffer);
+    if (6 * unitate >= width / 2)
+    {
+      outtextxy(STG - A * unitate + 2, i, buffer);
+    }
+    else if ((20 * unitate >= width / 2))
+    {
+      if (((midy - i + yoffset) / unitate) % 2 == 0)
+        outtextxy(STG - A * unitate + 2, i, buffer);
+    }
+    else if ((40 * unitate >= width / 2))
+    {
+      if (((midy - i + yoffset) / unitate) % 10 == 0)
+        outtextxy(STG - A * unitate + 2, i, buffer);
+    }
+    else if (((midy - i + yoffset) / unitate) % 20 == 0)
+    {
+      outtextxy(STG - A * unitate + 2, i, buffer);
+    }
+    i += unitate;
   }
   i = midy + unitate;
   while (i >= SUS)
   {
     char buffer[10] = "";
-    sprintf(buffer, "%d", (midy - i) / unitate);
+    sprintf(buffer, "%d", (midy - i + yoffset) / unitate);
     line(STG - A * unitate - 2, i, STG - A * unitate + 2, i);
     settextstyle(font, HORIZ_DIR, 1);
     setbkcolor(COLOR(190, 190, 190));
-    outtextxy(STG - A * unitate + 2, i, buffer);
+    if (6 * unitate >= width / 2)
+    {
+      outtextxy(STG - A * unitate + 2, i, buffer);
+    }
+    else if ((20 * unitate >= width / 2))
+    {
+      if (((midy - i + yoffset) / unitate) % 2 == 0)
+        outtextxy(STG - A * unitate + 2, i, buffer);
+    }
+    else if ((40 * unitate >= width / 2))
+    {
+      if (((midy - i + yoffset) / unitate) % 8 == 0)
+        outtextxy(STG - A * unitate + 2, i, buffer);
+    }
+    else if (((midy - i + yoffset) / unitate) % 20 == 0)
+    {
+      outtextxy(STG - A * unitate + 2, i, buffer);
+    }
     i -= unitate;
   }
   // final oy
 
-  line(STG, SUS + (JOS - SUS) / 2, DRP, SUS + (JOS - SUS) / 2); // OX
+  line(STG, SUS + (JOS - SUS) / 2 + yoffset, DRP, SUS + (JOS - SUS) / 2 + yoffset); // OX
   // sagetile OX
-  line(DRP - 2, SUS + (JOS - SUS) / 2 - 2, DRP, SUS + (JOS - SUS) / 2);
-  line(DRP - 2, SUS + (JOS - SUS) / 2 + 2, DRP, SUS + (JOS - SUS) / 2);
+  line(DRP - 2, SUS + (JOS - SUS) / 2 - 2 + yoffset, DRP, SUS + (JOS - SUS) / 2 + yoffset);
+  line(DRP - 2, SUS + (JOS - SUS) / 2 + 2 + yoffset, DRP, SUS + (JOS - SUS) / 2 + yoffset);
 
-  for (int i = STG + unitate; i <= DRP; i += unitate)
+  int *oy = new int;
+  *oy = STG - A * unitate;
+  i = *oy + unitate;
+  while (i <= DRP - textwidth("-88"))
   {
     char buffer[10] = "";
-    // sprintf(buffer, "%d", (i - STG) / unitate);
-    line(i, SUS + (JOS - SUS) / 2 - 2, i, SUS + (JOS - SUS) / 2 + 2);
+    sprintf(buffer, "%d", (i - *oy) / unitate);
+    line(i, SUS + (JOS - SUS) / 2 - 2 + yoffset, i, SUS + (JOS - SUS) / 2 + 2 + yoffset);
+    settextstyle(font, HORIZ_DIR, 1);
 
-    // settextstyle(font, HORIZ_DIR, 1);
-    // setbkcolor(COLOR(190, 190, 190));
-    // outtextxy(i, SUS + (SUS - JOS) / 2 - 4, buffer);
+    setbkcolor(COLOR(190, 190, 190));
+    if (12 * unitate >= width / 2)
+    {
+      outtextxy(i, SUS + (JOS - SUS) / 2 + 8 + yoffset, buffer);
+    }
+    else if ((30 * unitate >= width / 2))
+    {
+      if (((i - *oy) / unitate) % 2 == 0)
+        outtextxy(i, SUS + (JOS - SUS) / 2 + 8 + yoffset, buffer);
+    }
+    else if ((70 * unitate >= width / 2))
+    {
+      if (((i - *oy) / unitate) % 8 == 0)
+        outtextxy(i, SUS + (JOS - SUS) / 2 + 8 + yoffset, buffer);
+    }
+    else if (((i - *oy) / unitate) % 20 == 0)
+    {
+      outtextxy(i, SUS + (JOS - SUS) / 2 + 8 + yoffset, buffer);
+    }
+    i += unitate;
   }
+  i = *oy - unitate;
+  while (i >= STG)
+  {
+    char buffer[10] = "";
+    sprintf(buffer, "%d", (i - *oy) / unitate);
+    line(i, SUS + (JOS - SUS) / 2 - 2 + yoffset, i, SUS + (JOS - SUS) / 2 + 2 + yoffset);
+    settextstyle(font, HORIZ_DIR, 1);
+    setbkcolor(COLOR(190, 190, 190));
+
+    if (12 * unitate >= width / 2)
+    {
+      outtextxy(i, SUS + (JOS - SUS) / 2 + 8 + yoffset, buffer);
+    }
+    else if ((30 * unitate >= width / 2))
+    {
+      if (((i - *oy) / unitate) % 2 == 0)
+        outtextxy(i, SUS + (JOS - SUS) / 2 + 8 + yoffset, buffer);
+    }
+    else if ((70 * unitate >= width / 2))
+    {
+      if (((i - *oy) / unitate) % 8 == 0)
+        outtextxy(i, SUS + (JOS - SUS) / 2 + 8 + yoffset, buffer);
+    }
+    else if (((i - *oy) / unitate) % 20 == 0)
+    {
+      outtextxy(i, SUS + (JOS - SUS) / 2 + 8 + yoffset, buffer);
+    }
+
+    i -= unitate;
+  }
+  delete (oy);
 }
 
 char temp[256] = "";
@@ -663,7 +750,7 @@ void desenare_asimptote(double A, double B)
   if (c != epsilon && c != infinit)
   {
     setcolor(GREEN);
-    line(STG, punctmijloc - c, DRP, punctmijloc - c);
+    line(STG, punctmijloc - c + yoffset, DRP, punctmijloc - c + yoffset);
   }
 
   if (c != 0 || c == infinit)
@@ -673,7 +760,7 @@ void desenare_asimptote(double A, double B)
     int a = asimptota_verticala();
     a = a * unitate;
     setcolor(BLUE);
-    line(punctmijloc1 - a, SUS, punctmijloc1 - a, JOS);
+    line(punctmijloc1 - a, SUS + yoffset, punctmijloc1 - a, JOS + yoffset);
   }
 }
 
