@@ -11,6 +11,7 @@
 #include "lib/drawgraph.h"
 char func1[100] = "";
 char func2[100] = "";
+char func[100][7];
 int main()
 {
   initwindow(1280, 720, "Calculator grafic functie");

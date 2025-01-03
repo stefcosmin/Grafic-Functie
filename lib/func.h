@@ -500,7 +500,9 @@ void desenare_axe(double A, double B)
     }
     i += unitate;
   }
-  i = midy + unitate;
+
+  i = midy - unitate;
+
   while (i >= SUS)
   {
     char buffer[10] = "";

@@ -507,6 +507,7 @@ void menu(char *func1)
   if (x > (midx - textwidth("YES") - 25) && x < (midx - 15) && y > (midy - 60 - textheight("YES")) && y < (midy - 50))
   {
     introduInfSup(lower, upper, func1);
+    inf = lower, sup = upper;
   }
   else if (x > (midx + 15) && x < (midx + textwidth("NU") + 25) && y > (midy - 60 - textheight("NU")) && y < (midy - 50))
   {
@@ -536,4 +537,5 @@ void menu(char *func1, char *func2)
   outtextxy(midx - textwidth(func2) / 2, 130, func2);
   setfillstyle(SOLID_FILL, COLOR(40, 40, 40));
   introduInfSup(lower, upper, func1, func2);
+  inf = lower, sup = upper;
 }

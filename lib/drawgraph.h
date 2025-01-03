@@ -8,7 +8,7 @@
 #include "settings.h"
 
 float inf = -5, sup = 5;
-float lower = 100001, upper = 100001;
+float lower = -100001, upper = 100001;
 void PanZoom();
 
 void drawPZ()
@@ -39,23 +39,13 @@ void drawFun()
 {
   drawPZ();
   background();
-  if (lower == 100001 && upper == 100001)
-  {
-    minim_si_maxim(inf, sup);
-    GraphBorder(inf, sup);
-    // printf("   maxim: %f   minim: %f", MAXI, MINI);
-    desenare_axe(inf, sup);
-    desenare_grafic_functie(inf, sup, opt.color1);
-    desenare_asimptote(inf, sup);
-  }
-  else
-  {
-    minim_si_maxim(lower, upper);
-    GraphBorder(lower, upper);
-    desenare_axe(lower, upper);
-    desenare_grafic_functie(lower, upper, opt.color1);
-    desenare_asimptote(lower, upper);
-  }
+
+  minim_si_maxim(inf, sup);
+  GraphBorder(inf, sup);
+  desenare_axe(inf, sup);
+  desenare_grafic_functie(inf, sup, opt.color1);
+  desenare_asimptote(inf, sup);
+
   PanZoom();
 }
 
@@ -65,17 +55,17 @@ void drawFun(char *func1, char *func2)
   background();
   copieFun(func1);
 
-  minim_si_maxim(lower, upper);
-  GraphBorder(lower, upper);
-  desenare_axe(lower, upper);
-  desenare_grafic_functie(lower, upper, opt.color1);
+  minim_si_maxim(inf, sup);
+  GraphBorder(inf, sup);
+  desenare_axe(inf, sup);
+  desenare_grafic_functie(inf, sup, opt.color1);
 
   copieFun(func2);
-  minim_si_maxim(lower, upper);
-  GraphBorder(lower, upper);
-  desenare_grafic_functie(lower, upper, opt.color2);
+  minim_si_maxim(inf, sup);
+  GraphBorder(inf, sup);
+  desenare_grafic_functie(inf, sup, opt.color2);
 
-  int x = 0, y = 0, midx = getmaxx() - getmaxx() / 8, midy = getmaxy() / 2;
+  /*int x = 0, y = 0, midx = getmaxx() - getmaxx() / 8, midy = getmaxy() / 2;
   while (!(x > (midx - 10) && x < (midx + 50) && y > (midy - 325) && y < (midy - 275))) // save
   {
 
@@ -87,7 +77,9 @@ void drawFun(char *func1, char *func2)
   if (x > (midx - 10) && x < (midx + 50) && y > (midy - 325) && y < (midy - 275))
   {
     writeimagefile(NULL, 0, 0, getmaxx() - getmaxx() / 4, getmaxy());
-  }
+  }*/
+  PanZoom();
+  // endsave
 }
 
 void PanZoom()
@@ -115,28 +107,32 @@ void PanZoom()
 
   if (x > (midx + 50) && x < (midx + 100) && y > (midy + 200) && y < (midy + 250)) // plus
   {
-    inf = center - (0.5 * half_width), sup = center + (0.5 * half_width);
+    if (((center - (0.5 * half_width)) > lower) && ((center + (0.5 * half_width)) < upper))
+      inf = center - (0.5 * half_width), sup = center + (0.5 * half_width);
   }
   else if (x > (midx + 50) && x < (midx + 100) && y > (midy + 275) && y < (midy + 325)) // minus
   {
-    if ((center + (2 * half_width) - (center - (2 * half_width))) < 500)
-      inf = center - (2 * half_width), sup = center + (2 * half_width);
+    if (((center - (2 * half_width)) > lower) && ((center + (2 * half_width)) < upper))
+      if ((center + (2 * half_width) - (center - (2 * half_width))) < 500)
+        inf = center - (2 * half_width), sup = center + (2 * half_width);
   }
   else if (x > (midx - 90) && x < (midx - 40) && y > (midy) && y < (midy + 50)) // stanga
   {
-    inf -= dif / 8, sup -= dif / 8;
+    if ((inf - dif / 8 > lower) && (sup + dif / 8 < upper))
+      inf -= dif / 8, sup -= dif / 8;
   }
   else if (x > (midx + 50) && x < (midx + 100) && y > (midy) && y < (midy + 50)) // dreapta
   {
-    inf += dif / 8, sup += dif / 8;
+    if ((inf + dif / 8 > lower) && (sup - dif / 8 < upper))
+      inf += dif / 8, sup += dif / 8;
   }
   else if (x > (midx - 20) && x < (midx + 30) && y > (midy + 70) && y < (midy + 120)) // jos
   {
-    yoffset -= getmaxy() / 8;
+    yoffset -= int(getmaxy() / unitate) / 4 * unitate;
   }
   else if (x > (midx - 20) && x < (midx + 30) && y > (midy - 70) && y < (midy - 20)) // sus
   {
-    yoffset += getmaxy() / 8;
+    yoffset += int(getmaxy() / unitate) / 4 * unitate;
   }
 
   drawFun();
