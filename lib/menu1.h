@@ -21,7 +21,121 @@ void toLow(char *buffer)
   }
 }
 
-void init()
+void singleFunc(char *buffer)
+{
+  cleardevice();
+  setcolor(WHITE);
+  char *text;
+  switch (opt.lang)
+  {
+  case 0:
+    text = "Introduceti functia pentru a incepe";
+    break;
+  case 1:
+    text = "Enter the function";
+    break;
+  }
+
+  settextstyle(font, HORIZ_DIR, 4);
+  outtextxy(getmaxx() / 2 - textwidth(text) / 2, 50, text);
+  while (1)
+  {
+    delay(10);
+    if (kbhit())
+    {
+      char c = getch();
+      if (c == 13)
+        break;
+      else if (c == 8)
+      {
+        buffer[strlen(buffer) - 1] = '\0';
+      }
+      else
+        buffer[strlen(buffer)] = c, buffer[strlen(buffer)] = '\0';
+      cleardevice();
+      outtextxy(getmaxx() / 2 - textwidth(text) / 2, 50, text);
+      outtextxy(getmaxx() / 2 - textwidth(buffer) / 2, 80, buffer);
+    }
+  }
+  toLow(buffer);
+}
+
+void doubleFunc(char *func1, char *func2)
+{
+  cleardevice();
+  setcolor(WHITE);
+  char *text;
+  switch (opt.lang)
+  {
+  case 0:
+    text = "Introduceti prima functie";
+    break;
+  case 1:
+    text = "Enter the first function";
+    break;
+  }
+
+  settextstyle(font, HORIZ_DIR, 4);
+  outtextxy(getmaxx() / 2 - textwidth(text) / 2, 50, text);
+  while (1)
+  {
+    delay(10);
+    if (kbhit())
+    {
+      char c = getch();
+      if (c == 13)
+        break;
+      else if (c == 8)
+      {
+        func1[strlen(func1) - 1] = '\0';
+      }
+      else
+        func1[strlen(func1)] = c, func1[strlen(func1)] = '\0';
+      cleardevice();
+      outtextxy(getmaxx() / 2 - textwidth(text) / 2, 50, text);
+      outtextxy(getmaxx() / 2 - textwidth(func1) / 2, 80, func1);
+    }
+  }
+  toLow(func1);
+  // final prima functie
+
+  switch (opt.lang)
+  {
+  case 0:
+    text = "Introduceti a doua functie";
+    break;
+  case 1:
+    text = "Enter the second function";
+    break;
+  }
+
+  settextstyle(font, HORIZ_DIR, 4);
+  outtextxy(getmaxx() / 2 - textwidth(text) / 2, 120, text);
+  while (1)
+  {
+    delay(10);
+    if (kbhit())
+    {
+      char c = getch();
+      if (c == 13)
+        break;
+      else if (c == 8)
+      {
+        func2[strlen(func2) - 1] = '\0';
+      }
+      else
+        func2[strlen(func2)] = c, func2[strlen(func2)] = '\0';
+      cleardevice();
+      outtextxy(getmaxx() / 2 - textwidth(text) / 2, 50, text);
+      outtextxy(getmaxx() / 2 - textwidth(func1) / 2, 80, func1);
+      outtextxy(getmaxx() / 2 - textwidth(text) / 2, 120, text);
+      outtextxy(getmaxx() / 2 - textwidth(func2) / 2, 160, func2);
+    }
+  }
+  toLow(func2);
+}
+
+void init(char *func1, char *func2)
 {
   int midy = getmaxy() / 2;
   int midx = getmaxx() / 2;
@@ -68,11 +182,11 @@ void init()
 
   if (x > (midx - textwidth(text) / 2 - 2) && x < (midx + textwidth(text) / 2) && y > (midy - textheight(text) - 50 - 2) && y < (midx + textwidth(text) / 2 + 2, midy - 48))
   {
-    // single
+    singleFunc(func1);
   }
   else if (x > (midx - textwidth(text) / 2 - 2) && x < (midx + textwidth(text) / 2) && y > (midy - textheight(text) + 50 - 2) && y < (midy + 52))
   {
-    // double
+    doubleFunc(func1, func2);
   }
 }
 
@@ -398,4 +512,30 @@ void menu(char *func1)
   else if (x > (midx + 15) && x < (midx + textwidth("NU") + 25) && y > (midy - 60 - textheight("NU")) && y < (midy - 50))
   {
   }
+}
+
+void menu(char *func1, char *func2)
+{
+
+  short midx = getmaxx() / 2;
+  short midy = getmaxy() / 2;
+  cleardevice();
+  settextstyle(font, HORIZ_DIR, 4);
+  switch (opt.lang)
+  {
+  case 0:
+    outtextxy(midx - textwidth("Functia principala introdusa:") / 2, 20, "Functia principala introdusa:");
+    outtextxy(midx - textwidth("Functia secundara introdusa:") / 2, 100, "Functia secundara introdusa:");
+    break;
+  case 1:
+    outtextxy(midx - textwidth("Primary entered function:") / 2, 20, "Primary entered function:");
+    outtextxy(midx - textwidth("Secondary entered function:") / 2, 100, "Secondary entered function:");
+    break;
+  }
+
+  outtextxy(midx - textwidth(func1) / 2, 50, func1);
+  outtextxy(midx - textwidth(func2) / 2, 130, func2);
+  setfillstyle(SOLID_FILL, COLOR(40, 40, 40));
+  introduInfSup(lower, upper, func1, func2);
+  inf = lower, sup = upper;
 }

@@ -11,29 +11,13 @@
 #include "lib/drawgraph.h"
 char func1[100] = "";
 char func2[100] = "";
-char func[100][7];
+
 int main()
 {
   initwindow(1280, 720, "Calculator grafic functie");
   start();
-  init(func1, func2);
-  switch (strlen(func2))
-  {
-  case 0:
-    menu(func1);
-    copieFun(func1);
-    cleardevice();
-    drawFun();
-    getch();
-    closegraph();
-    break;
-  default:
-    menu(func1, func2);
-    cleardevice();
-    drawFun(func1, func2);
-    getch();
-    closegraph();
-  }
-
+  // init();
+  initial();
+  getch();
   return 0;
 }

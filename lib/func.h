@@ -12,13 +12,13 @@
 #define epsilon 0.000001
 #define infinit ULLONG_MAX
 using namespace std;
-char fun[256];
+char fun[256], func[256][7] = {{"x^2+2"}, {"x-3"}, {"x^4-2"}, {"x+2"}, {"2*x-x"}, {"7*x"}};
 char vect[256];
 int v[50];
 double MINI, MAXI, minim, maxim;
 double dim;
 int unitate, midy, midx, width;
-int STG = 0, DRP = 0, SUS = 0, JOS = 0, yoffset = 0;
+int STG = 0, DRP = 960, SUS = 0, JOS = 720, yoffset = 0;
 
 void GraphBorder(double A, double B)
 {
