@@ -13,8 +13,16 @@
 float inf = -5, sup = 5;
 float lower = -100001, upper = 100001;
 short culoare[] = {0, 1, 2, 4, 5, 14};
-
 void PanZoom();
+
+void toLow(char *buffer)
+{
+  for (int i = 0; i < strlen(buffer); i++)
+  {
+    if (isalpha(buffer[i]) && isupper(buffer[i]))
+      buffer[i] = tolower(buffer[i]);
+  }
+}
 
 void remove(int index)
 {
@@ -57,6 +65,7 @@ void newFunc()
   setfillstyle(SOLID_FILL, culoare[count]);
   bar(990, 80 + 50 * count, 1030, 80 + 50 * count + 40);
   setfillstyle(SOLID_FILL, COLOR(22, 22, 22));
+  setcolor(WHITE);
   char buffer[256] = "";
   while (1) // citire
   {
@@ -75,10 +84,15 @@ void newFunc()
       }
       else
         buffer[strlen(buffer)] = c, buffer[strlen(buffer)] = '\0';
+      toLow(buffer);
       bar(1040, 80 + 50 * count, 1220, 80 + 50 * count + 40);
       setbkcolor(COLOR(22, 22, 22));
       outtextxy(1040, 80 + 50 * count + textheight("x(^/") / 2, buffer);
     }
+  }
+  if (functie gresita)
+  {
+    remove(count);
   }
 }
 
@@ -233,8 +247,36 @@ void PanZoom()
   drawFun();
 }
 
-void initial()
+void graphMode()
 {
-
+  cleardevice();
+  if (opt.lang == 0)
+    outtextxy(getmaxx() / 2 - textwidth("Introduceti prima functie") / 2, 20, "Introduceti prima functie:");
+  else
+    outtextxy(getmaxx() / 2 - textwidth("Enter the first function") / 2, 20, "Enter the first function:");
+  char buffer[256] = "";
+  while (1) // citire
+  {
+    delay(10);
+    if (kbhit())
+    {
+      char c = getch();
+      if (c == 13)
+      {
+        break;
+      }
+      else if (c == 8)
+      {
+        buffer[strlen(buffer) - 1] = '\0';
+      }
+      else
+        buffer[strlen(buffer)] = c, buffer[strlen(buffer)] = '\0';
+      toLow(buffer);
+      setfillstyle(SOLID_FILL, 0);
+      bar(0, 70, 1280, 130);
+      outtextxy(getmaxx() / 2 - textwidth(buffer) / 2, 80, buffer);
+      setbkcolor(0);
+    }
+  }
   drawFun();
 }

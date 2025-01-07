@@ -16,8 +16,8 @@ int main()
 {
   initwindow(1280, 720, "Calculator grafic functie");
   start();
-  // init();
-  initial();
+  menu();
   getch();
+  closegraph();
   return 0;
 }

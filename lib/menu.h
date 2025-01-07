@@ -6,19 +6,47 @@
 #include "drawgraph.h"
 #define font 8
 
-void clearBuffer(char *buffer)
+void integrala()
 {
-  for (int i = 0; i < 100; i++)
-    buffer[i] = '\0';
-}
-
-void toLow(char *buffer)
-{
-  for (int i = 0; i < strlen(buffer); i++)
+  int midx = getmaxx() / 2, midy = getmaxy() / 2;
+  cleardevice();
+  switch (opt.lang)
   {
-    if (isalpha(buffer[i]) && isupper(buffer[i]))
-      buffer[i] = tolower(buffer[i]);
+  case 0:
+    outtextxy(midx - textwidth("Introduceti functia:") / 2, 30, "Introduceti functia:");
+    break;
+  case 1:
+    outtextxy(midx - textwidth("Enter the function:") / 2, 30, "Enter the function:");
+    break;
   }
+  char buffer[100] = "";
+  while (1) // citire
+  {
+    delay(10);
+    if (kbhit())
+    {
+      char c = getch();
+      if (c == 13)
+      {
+        strcpy(func[0], buffer);
+        break;
+      }
+      else if (c == 8)
+      {
+        buffer[strlen(buffer) - 1] = '\0';
+      }
+      else
+        buffer[strlen(buffer)] = c, buffer[strlen(buffer)] = '\0';
+      setfillstyle(SOLID_FILL, 0);
+      bar(0, 70, 1280, 120);
+      setbkcolor(0);
+      outtextxy(midx - textwidth(buffer) / 2, 70, buffer);
+    }
+  }
+  settextstyle(font, HORIZ_DIR, 2);
+  outtextxy(200, 200, "Valoarea integralei definite pe intervalul [0, 1] este:");
+  // sprintf(buffer, "%f", calculare_integrala_functie(0, 1, &v_functie));
+  // outtextxy(200 + textwidth("Valoarea integralei definite pe intervalul [0, 1] este:"), 200, buffer);
 }
 
 void init()
@@ -100,9 +128,7 @@ void introduInfSup(float &inf, float &sup, char *func1)
     break;
   }
 
-  char buffer[100];
-  clearBuffer(buffer);
-
+  char buffer[100] = "";
   while (1)
   {
     delay(10);
@@ -141,7 +167,7 @@ void introduInfSup(float &inf, float &sup, char *func1)
   inf = atof(buffer);
   char inferior[100];
   strcpy(inferior, buffer);
-  clearBuffer(buffer);
+  strcpy(buffer, "");
   switch (opt.lang)
   {
   case 0:
@@ -224,8 +250,7 @@ void introduInfSup(float &inf, float &sup, char *func1, char *func2)
     break;
   }
 
-  char buffer[100];
-  clearBuffer(buffer);
+  char buffer[100] = "";
 
   while (1)
   {
@@ -273,7 +298,7 @@ void introduInfSup(float &inf, float &sup, char *func1, char *func2)
   inf = atof(buffer);
   char inferior[100];
   strcpy(inferior, buffer);
-  clearBuffer(buffer);
+  strcpy(buffer, "");
   switch (opt.lang)
   {
   case 0:
@@ -334,7 +359,7 @@ void introduInfSup(float &inf, float &sup, char *func1, char *func2)
   sup = atof(buffer);
 }
 
-void menu(char *func1)
+void menu1(char *func1)
 {
   short midx = getmaxx() / 2;
   short midy = getmaxy() / 2;
@@ -397,5 +422,44 @@ void menu(char *func1)
   }
   else if (x > (midx + 15) && x < (midx + textwidth("NU") + 25) && y > (midy - 60 - textheight("NU")) && y < (midy - 50))
   {
+  }
+}
+
+void menu()
+{
+  short midx = getmaxx() / 2;
+  short midy = getmaxy() / 2;
+  cleardevice();
+  settextstyle(font, HORIZ_DIR, 4);
+  setcolor(opt.accent);
+  rectangle(midx - textwidth("Modul de grafic") / 2 - 5, midy - textheight("Modul de grafic") - 20 - 5, midx + textwidth("Modul de grafic") / 2 + 5, midy - 15);
+  rectangle(midx - textwidth("Calculate definite integral on [0,1]") / 2 - 5, midy + 15, midx + textwidth("Calculate definite integral on [0,1]") / 2 + 5, midy + 15 + textheight("Calculate definite integral on [0,1]") + 5);
+  setcolor(WHITE);
+  switch (opt.lang)
+  {
+  case 0:
+    outtextxy(midx - textwidth("Modul de grafic") / 2, midy - textheight("Modul de grafic") - 20, "Modul de grafic");
+    outtextxy(midx - textwidth("Calculare integrala definita [0,1]") / 2, midy + 20, "Calculare integrala definita [0,1]");
+    break;
+  case 1:
+    outtextxy(midx - textwidth("Graph mode") / 2, midy - textheight("Graph mode") - 20, "Graph mode");
+    outtextxy(midx - textwidth("Calculate definite integral on [0,1]") / 2, midy + 20, "Calculate definite integral on [0,1]");
+    break;
+  }
+  int x = 0, y = 0;
+  while (!((x > (midx - textwidth("Modul de grafic") / 2 - 5) && x < (midx + textwidth("Modul de grafic") / 2 + 5) && y > (midy - textheight("Modul de grafic") - 20 - 5) && y < (midy - 15)) ||                                                               // grafic
+           (x > (midx - textwidth("Calculate definite integral on [0,1]") / 2 - 5) && x < (midx + textwidth("Calculate definite integral on [0,1]") / 2 + 5) && y > (midy + 15) && y < (midy + 15 + textheight("Calculate definite integral on [0,1]") + 5)))) // integrala
+  {
+    while (!ismouseclick(WM_LBUTTONDOWN))
+      ;
+    getmouseclick(WM_LBUTTONDOWN, x, y);
+  }
+  if (x > (midx - textwidth("Modul de grafic") / 2 - 5) && x < (midx + textwidth("Modul de grafic") / 2 + 5) && y > (midy - textheight("Modul de grafic") - 20 - 5) && y < (midy - 15))
+  {
+    graphMode();
+  }
+  else if (x > (midx - textwidth("Calculate definite integral on [0,1]") / 2 - 5) && x < (midx + textwidth("Calculate definite integral on [0,1]") / 2 + 5) && y > (midy + 15) && y < (midy + 15 + textheight("Calculate definite integral on [0,1]") + 5))
+  {
+    integrala();
   }
 }
