@@ -640,7 +640,1154 @@ void desenare_asimptote(double A, double B)
 }
 
 
+//evaluare functie
+int gres[100];
+int k=0;
+void evaluator()
+{
+    int nrpd=0,nrpi=0,gr=0,i;
+    k=0;
+    for(int i=0;i<strlen(fun);i++)
+    {
+        if(fun[i]=='(')
+            nrpd++;
+        else if(fun[i]==')')
+            nrpi++;
+        else if(fun[i]=='(' && fun[i+1]==')')
+            gr=1,gres[++k]=gr;
 
+        else if(fun[i]==')' && fun[i+1]=='(')
+            gr=2,gres[++k]=gr;
+        else if(fun[i]=='(' && fun[i+1]=='+')
+            gr=3,gres[++k]=gr;
+        else if(fun[i]=='(' && fun[i+1]=='-')
+            gr=4,gres[++k]=gr;
+        else if(fun[i]=='(' && fun[i+1]=='*')
+            gr=5,gres[++k]=gr;
+        else if(fun[i]=='(' && fun[i+1]=='/')
+            gr=6,gres[++k]=gr;
+        else if(fun[i]=='(' && fun[i+1]=='^')
+            gr=7,gres[++k]=gr;
+        else if(fun[i]==')' && fun[i+1]=='s')
+            gr=8,gres[++k]=gr;
+        else if(fun[i]==')' && fun[i+1]=='c')
+            gr=9,gres[++k]=gr;
+        else if(fun[i]==')' && fun[i+1]=='t')
+            gr=10,gres[++k]=gr;
+        else if(fun[i]==')' && fun[i+1]=='l')
+            gr=11,gres[++k]=gr;
+        else if(fun[i]==')' && fun[i+1]=='e')
+            gr=12,gres[++k]=gr;
+        else if(fun[i]==')' && fun[i+1]=='r')
+            gr=13,gres[++k]=gr;
+        else if(fun[i]==')' && fun[i+1]=='x')
+            gr=14,gres[++k]=gr;
+        else if(fun[i]==')' && isdigit(fun[i+1]))
+            gr=15,gres[++k]=gr;
+        else if(fun[i]=='+' && fun[i+1]=='+')
+            gr=16,gres[++k]=gr;
+        else if(fun[i]=='+' && fun[i+1]=='-')
+            gr=17,gres[++k]=gr;
+        else if(fun[i]=='+' && fun[i+1]=='*')
+            gr=18,gres[++k]=gr;
+        else if(fun[i]=='+' && fun[i+1]=='/')
+            gr=19,gres[++k]=gr;
+        else if(fun[i]=='+' && fun[i+1]=='^')
+            gr=20,gres[++k]=gr;
+        else if(fun[i]=='-' && fun[i+1]=='+')
+            gr=21,gres[++k]=gr;
+        else if(fun[i]=='-' && fun[i+1]=='-')
+            gr=22,gres[++k]=gr;
+        else if(fun[i]=='-' && fun[i+1]=='*')
+            gr=23,gres[++k]=gr;
+        else if(fun[i]=='-' && fun[i+1]=='/')
+            gr=24,gres[++k]=gr;
+        else if(fun[i]=='-' && fun[i+1]=='^')
+            gr=25,gres[++k]=gr;
+        else if(fun[i]=='*' && fun[i+1]=='+')
+            gr=26,gres[++k]=gr;
+        else if(fun[i]=='*' && fun[i+1]=='-')
+            gr=27,gres[++k]=gr;
+        else if(fun[i]=='*' && fun[i+1]=='*')
+            gr=28,gres[++k]=gr;
+        else if(fun[i]=='*' && fun[i+1]=='/')
+            gr=29,gres[++k]=gr;
+        else if(fun[i]=='*' && fun[i+1]=='^')
+            gr=30,gres[++k]=gr;
+        else if(fun[i]=='/' && fun[i+1]=='+')
+            gr=31,gres[++k]=gr;
+        else if(fun[i]=='/' && fun[i+1]=='-')
+            gr=32,gres[++k]=gr;
+        else if(fun[i]=='/' && fun[i+1]=='*')
+            gr=33,gres[++k]=gr;
+        else if(fun[i]=='/' && fun[i+1]=='/')
+            gr=34,gres[++k]=gr;
+        else if(fun[i]=='/' && fun[i+1]=='^')
+            gr=35,gres[++k]=gr;
+        else if(fun[i]=='^' && fun[i+1]=='+')
+            gr=36,gres[++k]=gr;
+        else if(fun[i]=='^' && fun[i+1]=='-')
+            gr=37,gres[++k]=gr;
+        else if(fun[i]=='^' && fun[i+1]=='*')
+            gr=38,gres[++k]=gr;
+        else if(fun[i]=='^' && fun[i+1]=='/')
+            gr=39,gres[++k]=gr;
+        else if(fun[i]=='^' && fun[i+1]=='^')
+            gr=40,gres[++k]=gr;
+        else if(strchr("sctlre",fun[i]) && strchr("sctlre",fun[i+1]))
+            gr=41,gres[++k]=gr;
+        else if(fun[i]=='s' && ( fun[i+1]!='i' || fun[i+2]!='n'))
+            gr=42,gres[++k]=gr;
+        else if(fun[i]=='c')
+        {
+            if(fun[i+1]=='o' && fun[i+2]!='s')
+                gr=43,gres[++k]=gr;
+            else if(fun[i+1]=='t' && fun[i+2]!='g')
+                gr=44,gres[++k]=gr;
+            else gr=45,gres[++k]=gr;
+        }
+        else if(fun[i]=='t' && fun[i+1]!='g')
+            gr=46,gres[++k]=gr;
+        else if(fun[i]=='l' && fun[i+1]!='n')
+            gr=47,gres[++k]=gr;
+        else if(fun[i]=='r' && (fun[i+1]!='a' || fun[i+2]!='d') )
+            gr=48,gres[++k]=gr;
+        else if(fun[i]=='e' && (fun[i+1]!='x' || fun[i+2]!='p'))
+            gr=49,gres[++k]=gr;
+        else if(strchr("+-*/^",fun[i]) && fun[i+1]==')')
+            gr=50,gres[++k]=gr;
+
+
+    }
+    if(strchr("+-*/^",fun[0]))
+        gr=51,gres[++k]=gr;
+    if(strchr("+-*/^",fun[strlen(fun)-1]))
+        gr=52,gres[++k]=gr;
+    if(nrpd!=nrpi)
+        gr=53,gres[++k]=gr;
+    if(k==0)
+        gr=54,gres[++k]=gr;
+
+}
+int kev;
+void ev_interval(int width, int height, double A, double B, int limba)
+{
+    kev=0;
+    char text[1001];
+    if(A>=B)
+    {
+        settextstyle(8,HORIZ_DIR,3);
+        settextjustify(CENTER_TEXT,kev);
+        setcolor(WHITE);
+        if(limba==1)
+            strcpy(text,"Intervalul nu este bine ales");
+        else
+            strcpy(text,"The range is not well chosen");
+        outtextxy(width/2,height/2+100+kev,text);
+        kev+=27;
+    }
+    else{
+        settextstyle(8,HORIZ_DIR,3);
+        settextjustify(CENTER_TEXT,kev);
+        setcolor(WHITE);
+        if(limba==1)
+            strcpy(text,"Intervalul este bine ales");
+        else
+            strcpy(text,"The range is well chosen");
+        outtextxy(width/2,height/2+100+kev,text);
+        kev+=27;
+    }
+}
+
+void mesaj_ev(int width, int height, int limba)
+{
+    char text[1001];
+    settextstyle(8, HORIZ_DIR, 3);
+    k=0;
+    evaluator();
+    settextjustify(CENTER_TEXT,kev);
+    setcolor(WHITE);
+    for(int i=1;i<=k;i++)
+    {
+        if(limba==1){
+        if(gres[i]==1)
+        {
+            strcpy(text,"Nu poate aparea o paranteza deschisa urmata de una inchisa");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==2)
+        {
+            strcpy(text,"Nu poate aparea o paranteza inchisa urmata de una deschisa");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==3)
+        {
+            strcpy(text,"Nu poate aparea o paranteza deschisa urmata de +");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==4)
+        {
+            strcpy(text,"Nu poate aparea o paranteza deschisa urmata de -");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==5)
+        {
+            strcpy(text,"Nu poate aparea o paranteza deschisa urmata de *");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==6)
+        {
+            strcpy(text,"Nu poate aparea o paranteza deschisa urmata de /");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==7)
+        {
+            strcpy(text,"Nu poate aparea o paranteza deschisa urmata de ^");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==8)
+        {
+            strcpy(text,"Nu poate aparea o paranteza inchisa urmata de functia sin");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==9)
+        {
+            strcpy(text,"Nu poate aparea o paranteza inchisa urmata de functia cos sau ctg");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==10)
+        {
+            strcpy(text,"Nu poate aparea o paranteza inchisa urmata de functia tg");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==11)
+        {
+            strcpy(text,"Nu poate aparea o paranteza inchisa urmata de functia logaritmica");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==12)
+        {
+            strcpy(text,"Nu poate aparea o paranteza inchisa urmata de functia exponentiala");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==13)
+        {
+            strcpy(text,"Nu poate aparea o paranteza inchisa urmata de functia radical");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==14)
+        {
+            strcpy(text,"Nu poate aparea o paranteza inchisa urmata de variabila x");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==15)
+        {
+            strcpy(text,"Nu poate aparea o paranteza inchisa urmata de o cifra");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==16)
+        {
+            strcpy(text,"Nu poate aparea simbolul + urmat de +");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==17)
+        {
+            strcpy(text,"Nu poate aparea simbolul + urmat de -");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==18)
+        {
+            strcpy(text,"Nu poate aparea simbolul + urmat de *");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==19)
+        {
+            strcpy(text,"Nu poate aparea simbolul + urmat de /");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==20)
+        {
+            strcpy(text,"Nu poate aparea simbolul + urmat de ^");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==21)
+        {
+            strcpy(text,"Nu poate aparea simbolul - urmat de +");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==22)
+        {
+            strcpy(text,"Nu poate aparea simbolul - urmat de -");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==23)
+        {
+            strcpy(text,"Nu poate aparea simbolul - urmat de *");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==24)
+        {
+            strcpy(text,"Nu poate aparea simbolul - urmat de /");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==25)
+        {
+            strcpy(text,"Nu poate aparea simbolul - urmat de ^");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==26)
+        {
+            strcpy(text,"Nu poate aparea simbolul * urmat de +");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==27)
+        {
+            strcpy(text,"Nu poate aparea simbolul * urmat de -");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==28)
+        {
+            strcpy(text,"Nu poate aparea simbolul * urmat de *");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==29)
+        {
+            strcpy(text,"Nu poate aparea simbolul * urmat de /");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==30)
+        {
+            strcpy(text,"Nu poate aparea simbolul * urmat de ^");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==31)
+        {
+            strcpy(text,"Nu poate aparea simbolul / urmat de +");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==32)
+        {
+            strcpy(text,"Nu poate aparea simbolul / urmat de -");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==33)
+        {
+            strcpy(text,"Nu poate aparea simbolul / urmat de *");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==34)
+        {
+            strcpy(text,"Nu poate aparea simbolul / urmat de /");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==35)
+        {
+            strcpy(text,"Nu poate aparea simbolul / urmat de ^");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==36)
+        {
+            strcpy(text,"Nu poate aparea simbolul ^ urmat de +");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==37)
+        {
+            strcpy(text,"Nu poate aparea simbolul ^ urmat de -");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==38)
+        {
+            strcpy(text,"Nu poate aparea simbolul ^ urmat de *");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==39)
+        {
+            strcpy(text,"Nu poate aparea simbolul ^ urmat de /");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==40)
+        {
+            strcpy(text,"Nu poate aparea simbolul ^ urmat de ^");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==41)
+        {
+            strcpy(text,"Nu se pot folosi functiile trigonometrice in acest mod");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==42)
+        {
+            strcpy(text,"Functia sin este scrisa gresit");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==43)
+        {
+            strcpy(text,"Functia cos este scrisa gresit");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==44)
+        {
+            strcpy(text,"Functia ctg este scrisa gresit");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+         else if(gres[i]==45)
+        {
+            strcpy(text,"Functia cos sau ctg este scrisa gresit");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+         else if(gres[i]==46)
+        {
+            strcpy(text,"Functia tg este scrisa gresit");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+         else if(gres[i]==47)
+        {
+            strcpy(text,"Functia ln este scrisa gresit");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+         else if(gres[i]==48)
+        {
+            strcpy(text,"Functia rad este scrisa gresit");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+         else if(gres[i]==49)
+        {
+            strcpy(text,"Functia exp este scrisa gresit");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+         else if(gres[i]==50)
+        {
+            strcpy(text,"Nu puteti scrie operatorii langa paranteza inchisa");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+         else if(gres[i]==51)
+        {
+            strcpy(text,"Inceputul functiei este gresit");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+         else if(gres[i]==52)
+        {
+            strcpy(text,"Sfarsitul functiei este gresit");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+         else if(gres[i]==53)
+        {
+            strcpy(text,"Numarul parantezelor deschise nu este egal cu numarul parantezelor inchise");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+         else if(gres[i]==54)
+        {
+            strcpy(text,"Functia este scrisa corect!:)");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+    }
+    else
+    {
+        if(gres[i]==1)
+        {
+            strcpy(text,"An open parenthesis followed by a closed one cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==2)
+        {
+            strcpy(text,"A closed parenthesis followed by an open one cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==3)
+        {
+            strcpy(text,"An open parenthesis followed by + cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==4)
+        {
+            strcpy(text,"An open parenthesis followed by - cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==5)
+        {
+            strcpy(text,"An open parenthesis followed by * cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==6)
+        {
+            strcpy(text,"An open parenthesis followed by / cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==7)
+        {
+            strcpy(text,"An open parenthesis followed by ^ cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==8)
+        {
+            strcpy(text,"A  ')' followed by the sin function cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==9)
+        {
+            strcpy(text,"A  ')' followed by the cos or cot function cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==10)
+        {
+            strcpy(text,"A ')' followed by the tangent function cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==11)
+        {
+            strcpy(text,"A ')' followed by the logarithmic function cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==12)
+        {
+            strcpy(text,"A ')' followed by the exponential function cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==13)
+        {
+            strcpy(text,"A ')' followed by the radical function cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==14)
+        {
+            strcpy(text,"A ')' followed by the constant x cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==15)
+        {
+            strcpy(text,"A ')' followed by a number cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==16)
+        {
+            strcpy(text,"The + symbol followed by the + symbol cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==17)
+        {
+            strcpy(text,"The + symbol followed by the - symbol cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==18)
+        {
+            strcpy(text,"The + symbol followed by the * symbol cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==19)
+        {
+            strcpy(text,"The + symbol followed by the / symbol cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==20)
+        {
+            strcpy(text,"The + symbol followed by the ^ symbol cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==21)
+        {
+            strcpy(text,"The - symbol followed by the + symbol cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==22)
+        {
+            strcpy(text,"The - symbol followed by the - symbol cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==23)
+        {
+            strcpy(text,"The - symbol followed by the * symbol cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==24)
+        {
+            strcpy(text,"The - symbol followed by the / symbol cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==25)
+        {
+            strcpy(text,"The - symbol followed by the ^ symbol cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==26)
+        {
+            strcpy(text,"The * symbol followed by the + symbol cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==27)
+        {
+            strcpy(text,"The * symbol followed by the - symbol cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==28)
+        {
+            strcpy(text,"The * symbol followed by the * symbol cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==29)
+        {
+            strcpy(text,"The * symbol followed by the / symbol cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==30)
+        {
+            strcpy(text,"The * symbol followed by the ^ symbol cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==31)
+        {
+            strcpy(text,"The / symbol followed by the + symbol cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==32)
+        {
+            strcpy(text,"The / symbol followed by the - symbol cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==33)
+        {
+            strcpy(text,"The / symbol followed by the * symbol cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==34)
+        {
+            strcpy(text,"The / symbol followed by the / symbol cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==35)
+        {
+            strcpy(text,"The / symbol followed by the ^ symbol cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==36)
+        {
+            strcpy(text,"The ^ symbol followed by the + symbol cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==37)
+        {
+            strcpy(text,"The ^ symbol followed by the - symbol cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==38)
+        {
+            strcpy(text,"The ^ symbol followed by the * symbol cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==39)
+        {
+            strcpy(text,"The ^ symbol followed by the / symbol cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==40)
+        {
+            strcpy(text,"The ^ symbol followed by the ^ symbol cannot appear");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==41)
+        {
+            strcpy(text,"Trigonometric functions cannot be used in this way");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==42)
+        {
+            strcpy(text,"The sin function is not well written");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==43)
+        {
+            strcpy(text,"The cos function is not well written");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+        else if(gres[i]==44)
+        {
+            strcpy(text,"The ctg function is not well written");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+         else if(gres[i]==45)
+        {
+            strcpy(text,"The cos or ctg function is not well written");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+         else if(gres[i]==46)
+        {
+            strcpy(text,"The tg function is not well written");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+         else if(gres[i]==47)
+        {
+            strcpy(text,"The ln function is not well written");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+         else if(gres[i]==48)
+        {
+            strcpy(text,"The rad function is not well written");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+         else if(gres[i]==49)
+        {
+            strcpy(text,"The exp function is not well written");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+         else if(gres[i]==50)
+        {
+            strcpy(text,"You cannot write operators next to the closing parenthesis");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+         else if(gres[i]==51)
+        {
+            strcpy(text,"The beginning of the function is not well written");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+         else if(gres[i]==52)
+        {
+            strcpy(text,"The end of the function is not written correctly");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+         else if(gres[i]==53)
+        {
+            strcpy(text,"The number of '(' does not coincide with the nr. of ')'");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+         else if(gres[i]==54)
+        {
+            strcpy(text,"The function is written correctly!:)");
+            if(kev<=135)
+            {
+                outtextxy(width/2,height/2+100+kev,text);
+                kev+=27;
+            }
+        }
+    }
+}
+}
 
 int main()
 {
@@ -659,9 +1806,10 @@ int main()
     minim_si_maxim_normalizate(-2*pi,2*pi,minim,maxim);
     cout<<"MINIM: "<<MINI<<" "<<minim<<'\n';
     cout<<"MAXIM: "<<MAXI<<" "<<maxim;*/
-    initwindow(1350,700);
-    traseaza_grafic(-3.14,3.14,4,2);
-    desenare_asimptote(-10,10);
+    initwindow(1350,800);
+    //traseaza_grafic(A,B,2,2);
+    //desenare_asimptote(2*A,2*B);
+    mesaj_ev(1350,800,2);
     getch();
     closegraph();
     return 0;
