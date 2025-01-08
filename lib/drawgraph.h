@@ -13,8 +13,8 @@
 float inf = -5, sup = 5;
 float lower = -100001, upper = 100001;
 short culoare[] = {0, 1, 2, 4, 5, 14};
-void PanZoom();
-
+void PanZoom(bool asimp);
+void drawAsimp();
 void toLow(char *buffer)
 {
   for (int i = 0; i < strlen(buffer); i++)
@@ -37,20 +37,28 @@ void remove(int index)
 
 void showFunc()
 {
+  settextjustify(LEFT_TEXT, TOP_TEXT);
   int stg = 990, sus = 80, drp = 1260, jos = 420;
   setbkcolor(COLOR(22, 22, 22));
   setcolor(WHITE);
   settextstyle(font, HORIZ_DIR, 1);
   int i = 0;
-  while (strlen(func[i]) != 0)
+  if (strlen(asimp) == 0)
+    while (strlen(func[i]) != 0)
+    {
+      setfillstyle(SOLID_FILL, culoare[i]);
+      bar(stg, sus + 50 * i, stg + 40, sus + 50 * i + 40);
+      char buffer[256] = "";
+      strcpy(buffer, func[i]);
+      outtextxy(stg + 50, sus + 50 * i + textheight(buffer) / 2, buffer);
+      readimagefile("img/pz/trash.jpg", drp - 40, sus + 50 * i, drp, sus + 50 * i + 40);
+      i++;
+    }
+  else
   {
-    setfillstyle(SOLID_FILL, culoare[i]);
+    setfillstyle(SOLID_FILL, 0);
     bar(stg, sus + 50 * i, stg + 40, sus + 50 * i + 40);
-    char buffer[256] = "";
-    strcpy(buffer, func[i]);
-    outtextxy(stg + 50, sus + 50 * i + textheight(buffer) / 2, buffer);
-    readimagefile("img/pz/trash.jpg", drp - 40, sus + 50 * i, drp, sus + 50 * i + 40);
-    i++;
+    outtextxy(stg + 50, sus + 50 * i + textheight(asimp) / 2, asimp);
   }
   settextstyle(font, HORIZ_DIR, 2);
 }
@@ -58,10 +66,11 @@ void showFunc()
 void newFunc()
 {
   int count = 0;
-  do
+  while (strlen(func[count]) != 0)
   {
     count++;
-  } while (strlen(func[count]) != 0);
+  }
+
   setfillstyle(SOLID_FILL, culoare[count]);
   bar(990, 80 + 50 * count, 1030, 80 + 50 * count + 40);
   setfillstyle(SOLID_FILL, COLOR(22, 22, 22));
@@ -75,7 +84,6 @@ void newFunc()
       char c = getch();
       if (c == 13)
       {
-        strcpy(func[count], buffer);
         break;
       }
       else if (c == 8)
@@ -90,10 +98,12 @@ void newFunc()
       outtextxy(1040, 80 + 50 * count + textheight("x(^/") / 2, buffer);
     }
   }
-  if (functie gresita)
-  {
-    remove(count);
-  }
+  copieFun(buffer);
+  char text[100] = "";
+  mesaj_ev(1280, 720, opt.lang, text);
+  cout << buffer << " " << text;
+  if (strcmp(text, "Functia este scrisa corect!:)") == 0 || strcmp(text, "The function is written correctly!:)") == 0)
+    strcpy(func[count], buffer);
 }
 
 void drawPZ()
@@ -128,6 +138,7 @@ void background()
 
 void drawFun()
 {
+  cleardevice();
   drawPZ();
   background();
   desenare_axe(inf, sup);
@@ -141,10 +152,10 @@ void drawFun()
     i++;
   }
 
-  PanZoom();
+  PanZoom(0);
 }
 
-void PanZoom()
+void PanZoom(bool asimp)
 {
   int x = 0, y = 0;
   int midx = getmaxx() - getmaxx() / 8, midy = getmaxy() / 2;
@@ -183,17 +194,21 @@ void PanZoom()
   else if ((x > (midx + 85) && x < (midx + 135)) && y > (midy + 235) && y < (midy + 285)) // minus
   {
     if (((center - (2 * half_width)) > lower) && ((center + (2 * half_width)) < upper))
+    {
       if ((center + (2 * half_width) - (center - (2 * half_width))) < 500)
         inf = center - (2 * half_width), sup = center + (2 * half_width);
+    }
+    else
+      inf = lower, sup = upper;
   }
   else if (x > (midx - 135) && x < (midx - 15) && y > (midy + 200) && y < (midy + 250)) // stanga
   {
-    if ((inf - dif / 8 > lower) && (sup + dif / 8 < upper))
+    if ((inf - dif / 8 > lower) && (sup - dif / 8 < upper))
       inf -= dif / 8, sup -= dif / 8;
   }
   else if (x > (midx + 5) && x < (midx + 55) && y > (midy + 200) && y < (midy + 250)) // dreapta
   {
-    if ((inf + dif / 8 > lower) && (sup - dif / 8 < upper))
+    if ((inf + dif / 8 > lower) && (sup + dif / 8 < upper))
       inf += dif / 8, sup += dif / 8;
   }
   else if (x > (midx - 65) && x < (midx - 15) && y > (midy + 270) && y < (midy + 320)) // jos
@@ -243,12 +258,16 @@ void PanZoom()
 
     remove(5);
   }
-
-  drawFun();
+  if (asimp == true)
+    drawAsimp();
+  else
+    drawFun();
 }
 
 void graphMode()
 {
+  settextjustify(LEFT_TEXT, TOP_TEXT);
+  settextstyle(font, HORIZ_DIR, 4);
   cleardevice();
   if (opt.lang == 0)
     outtextxy(getmaxx() / 2 - textwidth("Introduceti prima functie") / 2, 20, "Introduceti prima functie:");
@@ -278,5 +297,26 @@ void graphMode()
       setbkcolor(0);
     }
   }
+  copieFun(buffer);
+  char text[100] = "";
+  mesaj_ev(1280, 720, opt.lang, text);
+  if (strcmp(text, "Functia este scrisa corect!:)") == 0 || strcmp(text, "The function is written correctly!:)") == 0)
+    strcpy(func[0], buffer);
+  else
+    graphMode();
   drawFun();
+}
+
+void drawAsimp()
+{
+  cleardevice();
+  drawPZ();
+  background();
+  desenare_axe(inf, sup);
+  minim_si_maxim(inf, sup);
+  GraphBorder(inf, sup);
+  desenare_grafic_functie(inf, sup, culoare[0]);
+  desenare_asimptote(inf, sup);
+
+  PanZoom(1);
 }

@@ -106,6 +106,7 @@ void init()
 
 void introduInfSup(float &inf, float &sup, char *func1)
 {
+
   short midx = getmaxx() / 2;
   short midy = getmaxy() / 2;
   cleardevice();
@@ -218,6 +219,7 @@ void introduInfSup(float &inf, float &sup, char *func1)
     }
   }
   sup = atof(buffer);
+  lower = inf, upper = sup;
 }
 
 void introduInfSup(float &inf, float &sup, char *func1, char *func2)
@@ -359,70 +361,55 @@ void introduInfSup(float &inf, float &sup, char *func1, char *func2)
   sup = atof(buffer);
 }
 
-void menu1(char *func1)
+void singleFunc()
 {
-  short midx = getmaxx() / 2;
-  short midy = getmaxy() / 2;
+  settextjustify(LEFT_TEXT, TOP_TEXT);
   cleardevice();
+  setcolor(WHITE);
+  char text[100] = "";
+  char buffer[100] = "";
+  switch (opt.lang)
+  {
+  case 0:
+    strcpy(text, "Introduceti functia pentru a incepe");
+    break;
+  case 1:
+    strcpy(text, "Enter the function");
+    break;
+  }
+
   settextstyle(font, HORIZ_DIR, 4);
-  switch (opt.lang)
+  outtextxy(getmaxx() / 2 - textwidth(text) / 2, 50, text);
+  while (1)
   {
-  case 0:
-    outtextxy(midx - textwidth("Functia introdusa:") / 2, 20, "Functia introdusa:");
-    break;
-  case 1:
-    outtextxy(midx - textwidth("Entered function:") / 2, 20, "Entered function:");
-    break;
+    delay(10);
+    if (kbhit())
+    {
+      char c = getch();
+      if (c == 13)
+        break;
+      else if (c == 8)
+      {
+        buffer[strlen(buffer) - 1] = '\0';
+      }
+      else
+        buffer[strlen(buffer)] = c, buffer[strlen(buffer)] = '\0';
+      cleardevice();
+      outtextxy(getmaxx() / 2 - textwidth(text) / 2, 50, text);
+      outtextxy(getmaxx() / 2 - textwidth(buffer) / 2, 80, buffer);
+    }
   }
+  toLow(buffer);
+  copieFun(buffer);
 
-  outtextxy(midx - textwidth(func1) / 2, 60, func1);
-  setfillstyle(SOLID_FILL, COLOR(40, 40, 40));
-  switch (opt.lang)
-  {
-  case 0:
-    outtextxy(midx - textwidth("Doriti reprezentarea functiei pe un anumit interval?") / 2, 140, "Doriti reprezentareaa functiei pe un anumit interval?");
-    break;
-  case 1:
-    outtextxy(midx - textwidth("Do you want to represent function on a custom interval") / 2, 140, "Do you want to represent function on a custom interval");
-    break;
-  }
-
-  settextstyle(font, HORIZ_DIR, 6);
-
-  switch (opt.lang)
-  {
-  case 0:
-    bar(midx - textwidth("DA") - 25, midy - 60 - textheight("DA"), midx - 15, midy - 50);
-    bar(midx + 15, midy - 60 - textheight("NU"), midx + textwidth("NU") + 25, midy - 50);
-
-    outtextxy(midx - textwidth("DA") - 20, midy - 55 - textheight("DA"), "DA");
-    outtextxy(midx + 20, midy - 55 - textheight("NU"), "NU");
-    break;
-  case 1:
-    bar(midx - textwidth("YES") - 25, midy - 60 - textheight("YES"), midx - 15, midy - 50);
-    bar(midx + 15, midy - 60 - textheight("NO"), midx + textwidth("NO") + 25, midy - 50);
-
-    outtextxy(midx - textwidth("YES") - 20, midy - 55 - textheight("YES"), "YES");
-    outtextxy(midx + 20, midy - 55 - textheight("NO"), "NO");
-    break;
-  }
-
-  int x = 0, y = 0;
-  while (!((x > (midx - textwidth("DA") - 25) && x < (midx - 15) && y > (midy - 60 - textheight("YES")) && y < (midy - 50)) || (x > (midx + 15) && x < (midx + textwidth("NU") + 25) && y > (midy - 60 - textheight("NU")) && y < (midy - 50))))
-  {
-
-    while (!ismouseclick(WM_LBUTTONDOWN))
-      ;
-    getmouseclick(WM_LBUTTONDOWN, x, y);
-  }
-  if (x > (midx - textwidth("YES") - 25) && x < (midx - 15) && y > (midy - 60 - textheight("YES")) && y < (midy - 50))
-  {
-    introduInfSup(lower, upper, func1);
-    inf = lower, sup = upper;
-  }
-  else if (x > (midx + 15) && x < (midx + textwidth("NU") + 25) && y > (midy - 60 - textheight("NU")) && y < (midy - 50))
-  {
-  }
+  strcpy(text, "");
+  cout
+      << 1;
+  mesaj_ev(1280, 720, opt.lang, text);
+  if (strcmp(text, "Functia este scrisa corect!:)") == 0 || strcmp(text, "The function is written correctly!:)") == 0)
+    strcpy(func[0], buffer), strcpy(func[1], ""), strcpy(asimp, buffer);
+  else
+    singleFunc();
 }
 
 void menu()
@@ -432,34 +419,56 @@ void menu()
   cleardevice();
   settextstyle(font, HORIZ_DIR, 4);
   setcolor(opt.accent);
-  rectangle(midx - textwidth("Modul de grafic") / 2 - 5, midy - textheight("Modul de grafic") - 20 - 5, midx + textwidth("Modul de grafic") / 2 + 5, midy - 15);
-  rectangle(midx - textwidth("Calculate definite integral on [0,1]") / 2 - 5, midy + 15, midx + textwidth("Calculate definite integral on [0,1]") / 2 + 5, midy + 15 + textheight("Calculate definite integral on [0,1]") + 5);
+  rectangle(midx - textwidth("Modul de grafic") / 2 - 5, midy - 125, midx + textwidth("Modul de grafic") / 2 + 5, midy - 75);
+  rectangle(midx - textwidth("Calculate definite integral on [0,1]") / 2 - 5, midy - textheight("Calculate definite integral on [0,1]") - 20 - 5, midx + textwidth("Calculate definite integral on [0,1]") / 2 + 5, midy - 15);
+  rectangle(midx - textwidth("Calculate the asymptotes of a function") / 2 - 5, midy + 15, midx + textwidth("Calculate the asymptotes of a function") / 2 + 5, midy + 15 + textheight("Calculate the asymptotes of a function") + 5);
+  rectangle(midx - textwidth("Trasarea graficului unei functii pe un interval definit") / 2 - 5, midy + 75, midx + textwidth("Trasarea graficului unei functii pe un interval definit") / 2 + 5, midy + 85 + textheight("Trasarea graficului unei functii pe un interval definit") + 5);
   setcolor(WHITE);
   switch (opt.lang)
   {
   case 0:
-    outtextxy(midx - textwidth("Modul de grafic") / 2, midy - textheight("Modul de grafic") - 20, "Modul de grafic");
-    outtextxy(midx - textwidth("Calculare integrala definita [0,1]") / 2, midy + 20, "Calculare integrala definita [0,1]");
+    outtextxy(midx - textwidth("Modul de grafic") / 2, midy - 115, "Modul de grafic");
+    outtextxy(midx - textwidth("Calculare integrala definita [0,1]") / 2, midy - textheight("Calculare integrala definita [0,1]") - 20, "Calculare integrala definita [0,1]");
+    outtextxy(midx - textwidth("Calcularea asimptotelor unei functii") / 2, midy + 20, "Calcularea asimptotelor unei functii");
+    outtextxy(midx - textwidth("Trasarea graficului unei functii pe un interval definit") / 2, midy + 80, "Trasarea graficului unei functii pe un interval definit");
     break;
   case 1:
-    outtextxy(midx - textwidth("Graph mode") / 2, midy - textheight("Graph mode") - 20, "Graph mode");
-    outtextxy(midx - textwidth("Calculate definite integral on [0,1]") / 2, midy + 20, "Calculate definite integral on [0,1]");
+    outtextxy(midx - textwidth("graph mode") / 2, midy - 115, "Graph mode");
+    outtextxy(midx - textwidth("Calculate definite integral on [0,1]") / 2, midy - textheight("Calculate definite integral on [0,1]") - 20, "Calculate definite integral on [0,1]");
+    outtextxy(midx - textwidth("Calculate the asymptotes of a function") / 2, midy + 20, "Calculate the asymptotes of a function");
+    outtextxy(midx - textwidth("A funciton's graph on a defined interval") / 2, midy + 80, "A funciton's graph on a defined interval");
+
     break;
   }
   int x = 0, y = 0;
-  while (!((x > (midx - textwidth("Modul de grafic") / 2 - 5) && x < (midx + textwidth("Modul de grafic") / 2 + 5) && y > (midy - textheight("Modul de grafic") - 20 - 5) && y < (midy - 15)) ||                                                               // grafic
-           (x > (midx - textwidth("Calculate definite integral on [0,1]") / 2 - 5) && x < (midx + textwidth("Calculate definite integral on [0,1]") / 2 + 5) && y > (midy + 15) && y < (midy + 15 + textheight("Calculate definite integral on [0,1]") + 5)))) // integrala
+  while (!((x > (midx - textwidth("Modul de grafic") / 2 - 5) && x < (midx + textwidth("Modul de grafic") / 2 + 5) && y > (midy - 125) && y < (midy - 75)) ||                                                                                                                                                           // grafic
+           (x > (midx - textwidth("Calculate definite integral on [0,1]") / 2 - 5) && x < (midx + textwidth("Calculate definite integral on [0,1]") / 2 + 5) && y > (midy - textheight("Calculate definite integral on [0,1]") - 20 - 5) && y < (midy - 15)) ||                                                         // integrala
+           (x > (midx - textwidth("Calculate the asymptotes of a function") / 2 - 5) && x < (midx + textwidth("Calculate the asymptotes of a function") / 2 + 5) && y > (midy + 15) && y < (midy + 15 + textheight("Calculate the asymptotes of a function") + 5)) ||                                                   // asimptote
+           (x > (midx - textwidth("Trasarea graficului unei functii pe un interval definit") / 2 - 5) && x < (midx + textwidth("Trasarea graficului unei functii pe un interval definit") / 2 + 5) && y > (midy + 75) && y < (midy + 85 + textheight("Trasarea graficului unei functii pe un interval definit") + 5)))) // grafic pe interval definit
   {
     while (!ismouseclick(WM_LBUTTONDOWN))
       ;
     getmouseclick(WM_LBUTTONDOWN, x, y);
   }
-  if (x > (midx - textwidth("Modul de grafic") / 2 - 5) && x < (midx + textwidth("Modul de grafic") / 2 + 5) && y > (midy - textheight("Modul de grafic") - 20 - 5) && y < (midy - 15))
+  if (x > (midx - textwidth("Modul de grafic") / 2 - 5) && x < (midx + textwidth("Modul de grafic") / 2 + 5) && y > (midy - 125) && y < (midy - 75))
   {
     graphMode();
   }
-  else if (x > (midx - textwidth("Calculate definite integral on [0,1]") / 2 - 5) && x < (midx + textwidth("Calculate definite integral on [0,1]") / 2 + 5) && y > (midy + 15) && y < (midy + 15 + textheight("Calculate definite integral on [0,1]") + 5))
+  else if (x > (midx - textwidth("Calculate definite integral on [0,1]") / 2 - 5) && x < (midx + textwidth("Calculate definite integral on [0,1]") / 2 + 5) && y > (midy - textheight("Calculate definite integral on [0,1]") - 20 - 5) && y < (midy - 15))
   {
     integrala();
+  }
+  else if (x > (midx - textwidth("Calculate the asymptotes of a function") / 2 - 5) && x < (midx + textwidth("Calculate the asymptotes of a function") / 2 + 5) && y > (midy + 15) && y < (midy + 15 + textheight("Calculate the asymptotes of a function") + 5))
+  {
+    singleFunc();
+    settextjustify(LEFT_TEXT, TOP_TEXT);
+    drawAsimp();
+  }
+  else if (x > (midx - textwidth("Trasarea graficului unei functii pe un interval definit") / 2 - 5) && x < (midx + textwidth("Trasarea graficului unei functii pe un interval definit") / 2 + 5) && y > (midy + 75) && y < (midy + 85 + textheight("Trasarea graficului unei functii pe un interval definit") + 5))
+  {
+    singleFunc();
+    settextjustify(LEFT_TEXT, TOP_TEXT);
+    introduInfSup(inf, sup, func[0]);
+    drawFun();
   }
 }

@@ -12,7 +12,7 @@
 #define epsilon 0.000001
 #define infinit ULLONG_MAX
 using namespace std;
-char fun[256], func[256][7], count;
+char fun[256], func[256][7], asimp[256];
 char vect[256];
 int v[50];
 double MINI, MAXI, minim, maxim;
@@ -939,10 +939,8 @@ void ev_interval(int width, int height, double A, double B, int limba)
   }
 }
 
-void mesaj_ev(int width, int height, int limba)
+void mesaj_ev(int width, int height, int limba, char *text)
 {
-
-  char text[1001];
   settextstyle(8, HORIZ_DIR, 3);
   k = 0;
   evaluator();
