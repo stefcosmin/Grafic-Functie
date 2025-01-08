@@ -732,9 +732,9 @@ double asimptota_verticala()
       }
 
     if (b != 0)
-      c = (-a) / b;
+      c = a / b;
     else
-      c = -a;
+      c = a;
     return c;
   }
 }
@@ -875,9 +875,9 @@ void evaluator()
       gr = 39, gres[++k] = gr;
     else if (fun[i] == '^' && fun[i + 1] == '^')
       gr = 40, gres[++k] = gr;
-    else if (strchr("sctlre", fun[i]) && strchr("sctlre", fun[i + 1]))
+    else if (strchr("sctlre", fun[i]) && strchr("sclre", fun[i + 1]))
       gr = 41, gres[++k] = gr;
-    else if (fun[i] == 's' && (fun[i + 1] != 'i' || fun[i + 2] != 'n'))
+    else if (fun[i] == 's' && fun[i - 1] != 'o' && (fun[i + 1] != 'i' || fun[i + 2] != 'n'))
       gr = 42, gres[++k] = gr;
     else if (fun[i] == 'c')
     {
@@ -885,8 +885,6 @@ void evaluator()
         gr = 43, gres[++k] = gr;
       else if (fun[i + 1] == 't' && fun[i + 2] != 'g')
         gr = 44, gres[++k] = gr;
-      else
-        gr = 45, gres[++k] = gr;
     }
     else if (fun[i] == 't' && fun[i + 1] != 'g')
       gr = 46, gres[++k] = gr;
@@ -909,10 +907,9 @@ void evaluator()
     gr = 54, gres[++k] = gr;
 }
 int kev;
-void ev_interval(int width, int height, double A, double B, int limba)
+void ev_interval(int width, int height, double A, double B, int limba, char *text)
 {
   kev = 0;
-  char text[1001];
   if (A >= B)
   {
     settextstyle(8, HORIZ_DIR, 3);

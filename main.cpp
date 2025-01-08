@@ -9,8 +9,6 @@
 #include "lib/func.h"
 #include "lib/settings.h"
 #include "lib/drawgraph.h"
-char func1[100] = "";
-char func2[100] = "";
 
 int main()
 {

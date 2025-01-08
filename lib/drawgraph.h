@@ -101,7 +101,6 @@ void newFunc()
   copieFun(buffer);
   char text[100] = "";
   mesaj_ev(1280, 720, opt.lang, text);
-  cout << buffer << " " << text;
   if (strcmp(text, "Functia este scrisa corect!:)") == 0 || strcmp(text, "The function is written correctly!:)") == 0)
     strcpy(func[count], buffer);
 }

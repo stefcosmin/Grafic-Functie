@@ -8,6 +8,7 @@
 
 void integrala()
 {
+  settextjustify(LEFT_TEXT, TOP_TEXT);
   int midx = getmaxx() / 2, midy = getmaxy() / 2;
   cleardevice();
   switch (opt.lang)
@@ -28,7 +29,7 @@ void integrala()
       char c = getch();
       if (c == 13)
       {
-        strcpy(func[0], buffer);
+
         break;
       }
       else if (c == 8)
@@ -43,10 +44,22 @@ void integrala()
       outtextxy(midx - textwidth(buffer) / 2, 70, buffer);
     }
   }
-  settextstyle(font, HORIZ_DIR, 2);
-  outtextxy(200, 200, "Valoarea integralei definite pe intervalul [0, 1] este:");
-  // sprintf(buffer, "%f", calculare_integrala_functie(0, 1, &v_functie));
-  // outtextxy(200 + textwidth("Valoarea integralei definite pe intervalul [0, 1] este:"), 200, buffer);
+  char text[100] = "";
+  copieFun(buffer);
+  mesaj_ev(1280, 720, opt.lang, text);
+  if (strcmp(text, "Functia este scrisa corect!:)") == 0 || strcmp(text, "The function is written correctly!:)") == 0)
+  {
+    delay(100);
+    setfillstyle(SOLID_FILL, 0);
+    bar(0, getmaxy() / 2, 1280, 720);
+    strcpy(func[0], buffer);
+    settextstyle(font, HORIZ_DIR, 2);
+    outtextxy(400, 200, "Valoarea integralei definite pe intervalul [0, 1] este:");
+    sprintf(buffer, "%f", calculare_integrala_functie(0, 1, &v_functie));
+    outtextxy(200 + textwidth("Valoarea integralei definite pe intervalul [0, 1] este:"), 200, buffer);
+  }
+  else
+    integrala();
 }
 
 void init()
@@ -403,8 +416,6 @@ void singleFunc()
   copieFun(buffer);
 
   strcpy(text, "");
-  cout
-      << 1;
   mesaj_ev(1280, 720, opt.lang, text);
   if (strcmp(text, "Functia este scrisa corect!:)") == 0 || strcmp(text, "The function is written correctly!:)") == 0)
     strcpy(func[0], buffer), strcpy(func[1], ""), strcpy(asimp, buffer);
@@ -469,6 +480,9 @@ void menu()
     singleFunc();
     settextjustify(LEFT_TEXT, TOP_TEXT);
     introduInfSup(inf, sup, func[0]);
-    drawFun();
+    char text[256] = "";
+    ev_interval(1280, 720, inf, sup, opt.lang, text);
+    if (strcmp(text, "Intervalul este bine ales") == 0 || strcmp(text, "The range is well chosen") == 0)
+      drawFun();
   }
 }
