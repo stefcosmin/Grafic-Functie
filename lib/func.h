@@ -12,7 +12,7 @@
 #define epsilon 0.000001
 #define infinit ULLONG_MAX
 using namespace std;
-char fun[256], func[256][7], asimp[256];
+char fun[256], func[7][256], asimp[256];
 char vect[256];
 int v[50];
 double MINI, MAXI, minim, maxim;
@@ -797,7 +797,6 @@ void evaluator()
       nrpi++;
     else if (fun[i] == '(' && fun[i + 1] == ')')
       gr = 1, gres[++k] = gr;
-
     else if (fun[i] == ')' && fun[i + 1] == '(')
       gr = 2, gres[++k] = gr;
     else if (fun[i] == '(' && fun[i + 1] == '+')
@@ -1919,7 +1918,6 @@ void mesaj_ev(int width, int height, int limba, char *text)
         strcpy(text, "The function is written correctly!:)");
         if (kev <= 135)
         {
-
           outtextxy(width / 2, height / 2 + 100 + kev, text);
           kev += 27;
         }

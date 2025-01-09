@@ -54,9 +54,19 @@ void integrala()
     bar(0, getmaxy() / 2, 1280, 720);
     strcpy(func[0], buffer);
     settextstyle(font, HORIZ_DIR, 2);
-    outtextxy(400, 200, "Valoarea integralei definite pe intervalul [0, 1] este:");
-    sprintf(buffer, "%f", calculare_integrala_functie(0, 1, &v_functie));
-    outtextxy(200 + textwidth("Valoarea integralei definite pe intervalul [0, 1] este:"), 200, buffer);
+    switch (opt.lang)
+    {
+    case 0:
+      outtextxy(400, 200, "Valoarea integralei definite pe intervalul [0, 1] este:");
+      sprintf(buffer, "%f", calculare_integrala_functie(0, 1, &v_functie));
+      outtextxy(200 + textwidth("Valoarea integralei definite pe intervalul [0, 1] este:"), 200, buffer);
+      break;
+    case 1:
+      outtextxy(400, 200, "The integral's value on [0,1] is:");
+      sprintf(buffer, "%f", calculare_integrala_functie(0, 1, &v_functie));
+      outtextxy(300 + textwidth("The integral's value on [0,1] is:"), 200, buffer);
+      break;
+    }
   }
   else
     integrala();
