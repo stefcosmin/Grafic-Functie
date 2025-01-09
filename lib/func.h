@@ -782,6 +782,7 @@ void copieFun(char *t)
   strcpy(fun, t);
   strcpy(temp, fun);
 }
+
 int gres[100];
 int k = 0;
 void evaluator()
@@ -1924,5 +1925,16 @@ void mesaj_ev(int width, int height, int limba, char *text)
         }
       }
     }
+  }
+  switch (limba)
+  {
+  case 0:
+    if (strcmp(text, "Functia este scrisa corect!:)") != 0)
+      outtextxy(width / 2, height / 2 + 100 + kev + 27, "Apasati orice tasta pentru a continua"), getch();
+    break;
+  case 1:
+    if (strcmp(text, "The function is written correctly!:)") != 0)
+      outtextxy(width / 2, height / 2 + 100 + kev + 27, "Press any key to continue"), getch();
+    break;
   }
 }
